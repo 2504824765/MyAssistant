@@ -8,7 +8,8 @@
 import UIKit
 
 class DeepSeekCell: UITableViewCell {
-
+    @IBOutlet weak var deepSeekLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

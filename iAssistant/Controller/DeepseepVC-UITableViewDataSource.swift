@@ -20,6 +20,7 @@ extension DeepseekVC: UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: kQueryCellID, for: indexPath) as! QueryCell
+            cell.queryLabel.text = self.query
             cell.layoutIfNeeded()
             return cell
         }

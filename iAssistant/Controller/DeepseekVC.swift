@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class DeepseekVC: UIViewController, UITableViewDelegate {
     @IBOutlet weak var queryTextField: UITextView!
@@ -13,7 +15,12 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var queryTV: UITableView!
     
-    var currentRowCount: Int = 2
+    var currentRowCount: Int = 1
+    var query: String = ""
+    var messages: [Message] = []
+    var model: String = "deepseek-chat"
+//    var responseFormat: ResponseFormat = ResponseFormat(type: "json_object")
+    var responseFormat: ResponseFormat = ResponseFormat(type: "text")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +46,39 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
     }
     
     @IBAction func submitButtonPressed(_ sender: UIButton) {
-        currentRowCount += 1
-        queryTV.reloadData()
+        if self.queryTextField.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            self.query = queryTextField.text
+            currentRowCount += 1
+            queryTV.reloadData()
+            
+            // Handle response
+            print("Start sending request")
+            messages.append(Message(content: "Hello, my friend", role: "system"))
+            
+            let headers: HTTPHeaders = [
+                "Authorization": "Bearer sk-5e9919b7e7e9498489c8e5a5ec3246d8", // 替换为你的 API 密钥
+                "Content-Type": "application/json"
+            ]
+            
+            let url = "https://api.deepseek.com/chat/completions"
+            let parameters: [String: Any] = [
+                "messages": messages.map { ["role": $0.role, "content": $0.content] },
+                "model": model,
+                "response_format": ["type": responseFormat.type]
+            ]
+            AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
+                if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
+                    print("Raw Response: \(responseString)")
+                }
+//                switch response.result {
+//                case .success(let value):
+//                    print("Response: \(value)")
+//                case .failure(let error):
+//                    print("Error: \(error.localizedDescription)")
+//                }
+            }
+            print("request done")
+        }
     }
 
     

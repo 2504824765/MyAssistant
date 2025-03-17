@@ -8,7 +8,8 @@
 import UIKit
 
 class QueryCell: UITableViewCell {
-
+    @IBOutlet weak var queryLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

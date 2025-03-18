@@ -10,7 +10,7 @@ import Alamofire
 import SwiftyJSON
 import Down
 
-class DeepseekVC: UIViewController, UITableViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
+class DeepseekVC: UIViewController, UITableViewDelegate {
     @IBOutlet weak var queryTextView: UITextView!
     @IBOutlet weak var userView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
@@ -34,20 +34,20 @@ class DeepseekVC: UIViewController, UITableViewDelegate, UITextViewDelegate, UIS
         queryTV.dataSource = self
         queryTextView.delegate = self
         
-        // 监听键盘弹出通知
+        // 监听键盘弹出
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
 
-        // 监听键盘收起通知
+        // 监听键盘收起
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        messages.append(Message(content: "嗨！我是DeepSeek。我可以帮你搜索、答疑、写作，请把你的任务交给我吧～", role: "assistant"))
+        messages.append(Message(content: "嗨！我是DeepSeek。我可以帮你搜索、答疑、写作，请把你的任务交给我吧～", role: "system"))
         
         let tapGasture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         view.addGestureRecognizer(tapGasture)
     }
     
     deinit {
-        // 移除通知监听
+        // 移除监听
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -57,79 +57,45 @@ class DeepseekVC: UIViewController, UITableViewDelegate, UITextViewDelegate, UIS
         keyboardWillHide(Notification(name: UIResponder.keyboardWillHideNotification))
     }
     
-    // UIScrollViewDelegate 方法：监听拖动事件
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        // 拖动时收起键盘
-        queryTextView.resignFirstResponder()
-        // 调用键盘收起的逻辑
-        keyboardWillHide(Notification(name: UIResponder.keyboardWillHideNotification))
-    }
-    
-    // Press return to send
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            print("Return pressed")
-            submitButtonPressed(self.submitButton)
-            textView.resignFirstResponder() // 收起键盘
-            textView.text = ""
-            return false // 阻止回车键换行
-        }
-        return true
-    }
-    
-    
     @IBAction func submitButtonPressed(_ sender: UIButton) {
         if self.queryTextView.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
             self.query = queryTextView.text
+            messages.append(Message(content: self.queryTextView.text, role: "user"))
             currentRowCount += 1
             queryTV.reloadData()
             
             // Handle response
             print("Start sending request")
-            messages.append(Message(content: self.queryTextView.text, role: "system"))
             
             let headers: HTTPHeaders = [
-                "Authorization": "Bearer sk-5e9919b7e7e9498489c8e5a5ec3246d8", // 替换为你的 API 密钥
+                "Authorization": "Bearer \(kDeepSeekAPIKey)",
                 "Content-Type": "application/json"
             ]
             
-            let url = "https://api.deepseek.com/chat/completions"
+            let url = kDeepSeekBaseURL
             let parameters: [String: Any] = [
                 "messages": messages.map { ["role": $0.role, "content": $0.content] },
                 "model": model,
                 "response_format": ["type": responseFormat.type]
             ]
+            print(messages)
             AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
                 if let data = response.value {
                     let responseJSON = JSON(data)
                     print(responseJSON)
                     let message = Message(content: responseJSON["choices"][0]["message"]["content"].stringValue, role: responseJSON["choices"][0]["message"]["role"].stringValue)
-                    print("Message: \(message)")
                     self.messages.append(message)
                     self.currentRowCount += 1
                     self.queryTV.reloadData()
                 }
             }
+            scrollToBottom()
         }
     }
-
     
-    // 键盘弹出时调用
     @objc func keyboardWillShow(_ notification: Notification) {
-        // 获取键盘的高度
-        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-            let keyboardHeight = keyboardFrame.height
-            
-            // 更新文本框底部的约束
-            bottomConstraint.constant = keyboardHeight - view.safeAreaInsets.bottom + 45
-            
-            // 获取键盘动画的持续时间
-            if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
-                UIView.animate(withDuration: duration) {
-                    self.view.layoutIfNeeded()
-                }
-            }
-        }
+        adjustKeyboardConstraint(notification)
+        scrollToBottom()
     }
     
     // 键盘收起时调用

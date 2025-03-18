@@ -475,7 +475,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="CBu-Dj-Nnq">
                                         <rect key="frame" x="0.0" y="0.0" width="370" height="79"/>
                                         <subviews>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" text="我的问题" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6ez-zj-TYG">
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6ez-zj-TYG">
                                                 <rect key="frame" x="0.0" y="0.0" width="370" height="35"/>
                                                 <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                                                 <constraints>

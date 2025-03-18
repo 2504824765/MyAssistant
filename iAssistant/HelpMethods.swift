@@ -197,3 +197,33 @@ extension ElectronicFishVC {
         }
     }
 }
+
+extension DeepseekVC {
+    // 键盘弹出时调用
+    func adjustKeyboardConstraint(_ notification: Notification) {
+        // 获取键盘的高度
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            let keyboardHeight = keyboardFrame.height
+            
+            // 更新文本框底部的约束
+            bottomConstraint.constant = keyboardHeight - view.safeAreaInsets.bottom + 45
+            
+            // 获取键盘动画的持续时间
+            if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
+                UIView.animate(withDuration: duration) {
+                    self.view.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
+    // Scroll to bottom
+    func scrollToBottom() {
+        let lastSection = queryTV.numberOfSections - 1
+        let lastRow = queryTV.numberOfRows(inSection: lastSection) - 1
+        if lastRow >= 0 {
+            let indexPath = IndexPath(row: lastRow, section: lastSection)
+            queryTV.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
+    }
+}

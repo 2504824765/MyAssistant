@@ -23,10 +23,12 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
     var model: String = "deepseek-chat"
 //    var responseFormat: ResponseFormat = ResponseFormat(type: "json_object")
     var responseFormat: ResponseFormat = ResponseFormat(type: "text")
+    var chatID: String = ""
+    var chats: [Chat] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         self.queryTextView.layer.cornerRadius = 10
         
@@ -36,7 +38,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
         
         // 监听键盘弹出
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-
+        
         // 监听键盘收起
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -44,11 +46,43 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
         
         let tapGasture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         view.addGestureRecognizer(tapGasture)
+        
+        chats = readChatHistoryUsingUserDefaults()
+        print(chats)
+    }
+    
+    func readChatHistoryUsingUserDefaults() -> [Chat] {
+        if let chatsData = UserDefaults.standard.data(forKey: "AllChats") {
+            do {
+                return try JSONDecoder().decode([Chat].self, from: chatsData)
+            } catch {
+                print("ERROR: Failed to decode chatHistory: \(error)")
+            }
+        }
+        return []
     }
     
     deinit {
         // 移除监听
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    fileprivate func saveChatHistoryUsingUserDefaults(_ chats: [Chat]) {
+        do {
+            let data: Data = try JSONEncoder().encode(chats)
+            UserDefaults.standard.set(data, forKey: "AllChats")
+        } catch {
+            print("Failed to encode chatHistory: \(error)")
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if messages.count > 1 {
+            let chat: Chat = Chat(messages: self.messages, charID: self.chatID)
+            chats.append(chat)
+            saveChatHistoryUsingUserDefaults(self.chats)
+        }
     }
     
     // Tap to hide keyboard
@@ -78,12 +112,12 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
                 "model": model,
                 "response_format": ["type": responseFormat.type]
             ]
-            print(messages)
             AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
                 if let data = response.value {
                     let responseJSON = JSON(data)
-                    print(responseJSON)
+//                    print(responseJSON)
                     let message = Message(content: responseJSON["choices"][0]["message"]["content"].stringValue, role: responseJSON["choices"][0]["message"]["role"].stringValue)
+                    self.chatID = responseJSON["id"].stringValue
                     self.messages.append(message)
                     self.currentRowCount += 1
                     self.queryTV.reloadData()
@@ -112,14 +146,16 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
     }
     
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "ChatHistoryID" {
+            let chatHistoryTVC = segue.destination as! ChatHistoryTVC
+            chatHistoryTVC.chats = self.chats
+        }
     }
-    */
 
 }

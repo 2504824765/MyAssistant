@@ -461,7 +461,7 @@
             </objects>
             <point key="canvasLocation" x="1739" y="750"/>
         </scene>
-        <!--Deepseek-->
+        <!--DeepSeek-->
         <scene sceneID="cmZ-mz-rH5">
             <objects>
                 <viewController id="ZYf-yQ-XAB" customClass="DeepseekVC" customModule="iAssistant" customModuleProvider="target" sceneMemberID="viewController">
@@ -628,7 +628,13 @@
                             <constraint firstItem="k9A-o9-yQC" firstAttribute="trailing" secondItem="yOF-nx-etS" secondAttribute="trailing" constant="16" id="zVj-LA-ZA2"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Deepseek" largeTitleDisplayMode="never" id="pqj-8N-VTh"/>
+                    <navigationItem key="navigationItem" title="DeepSeek" largeTitleDisplayMode="never" id="pqj-8N-VTh">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="list.bullet" catalog="system" id="6lp-Ou-jdK">
+                            <connections>
+                                <segue destination="uAi-Ta-W57" kind="show" identifier="ChatHistoryID" id="gpM-1q-sne"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="bottomConstraint" destination="K8S-r9-P4o" id="8Yg-BF-mxt"/>
                         <outlet property="queryTV" destination="yOF-nx-etS" id="9bY-w9-6p6"/>
@@ -640,6 +646,52 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yb8-7r-xJY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2519.4029850746269" y="738.67276887871844"/>
+        </scene>
+        <!--历史对话-->
+        <scene sceneID="VYu-pq-Pwf">
+            <objects>
+                <tableViewController id="uAi-Ta-W57" customClass="ChatHistoryTVC" customModule="iAssistant" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Y1V-iO-fNE">
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatCellID" id="vvP-GK-me7" customClass="ChatHistoryCell" customModule="iAssistant" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="50" width="402" height="30.666666030883789"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vvP-GK-me7" id="WTZ-3F-5aa">
+                                    <rect key="frame" x="0.0" y="0.0" width="402" height="30.666666030883789"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wqd-jK-QZQ">
+                                            <rect key="frame" x="30" y="5" width="342" height="20.666666666666668"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="Wqd-jK-QZQ" secondAttribute="bottom" constant="5" id="dlK-kO-AyM"/>
+                                        <constraint firstItem="Wqd-jK-QZQ" firstAttribute="leading" secondItem="WTZ-3F-5aa" secondAttribute="leading" constant="30" id="ipD-Jn-aXF"/>
+                                        <constraint firstAttribute="trailing" secondItem="Wqd-jK-QZQ" secondAttribute="trailing" constant="30" id="tOA-Ig-OcW"/>
+                                        <constraint firstItem="Wqd-jK-QZQ" firstAttribute="top" secondItem="WTZ-3F-5aa" secondAttribute="top" constant="5" id="u3c-YX-hnt"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="chatLabel" destination="Wqd-jK-QZQ" id="e60-NK-Kcc"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="uAi-Ta-W57" id="rIQ-6M-Pb5"/>
+                            <outlet property="delegate" destination="uAi-Ta-W57" id="p7B-w2-09W"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="历史对话" id="tcS-nB-y31"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rtw-7W-qYm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3316" y="739"/>
         </scene>
         <!--Weather InfoVC-->
         <scene sceneID="vce-sw-S82">
@@ -1037,6 +1089,7 @@
         <image name="bg" width="6016" height="4016"/>
         <image name="bolt.horizontal.circle" catalog="system" width="128" height="123"/>
         <image name="d.circle" catalog="system" width="128" height="123"/>
+        <image name="list.bullet" catalog="system" width="128" height="87"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
         <image name="thermometer.low" catalog="system" width="80" height="128"/>

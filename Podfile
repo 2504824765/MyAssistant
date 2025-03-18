@@ -8,6 +8,7 @@ target 'iAssistant' do
   # Pods for iAssistant
   pod 'Alamofire'
   pod 'SwiftyJSON', '~> 4.0'
+  pod 'Down'
   
   # 加载swiftyJSON之后报错error: SDK does not contain 'libarclite' at the path
   # 似乎是因为项目支持的ios不一样，添加上下面者几行之后重新pod install可以正常编译

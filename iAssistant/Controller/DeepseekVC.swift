@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import Down
 
 class DeepseekVC: UIViewController, UITableViewDelegate {
     @IBOutlet weak var queryTextField: UITextView!
@@ -37,13 +38,15 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
         // 监听键盘收起通知
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-
+        messages.append(Message(content: "嗨！我是DeepSeek。我可以帮你搜索、答疑、写作，请把你的任务交给我吧～", role: "assistant"))
     }
     
     deinit {
         // 移除通知监听
         NotificationCenter.default.removeObserver(self)
     }
+    
+    
     
     @IBAction func submitButtonPressed(_ sender: UIButton) {
         if self.queryTextField.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
@@ -53,7 +56,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
             
             // Handle response
             print("Start sending request")
-            messages.append(Message(content: "Hello, my friend", role: "system"))
+            messages.append(Message(content: self.queryTextField.text, role: "system"))
             
             let headers: HTTPHeaders = [
                 "Authorization": "Bearer sk-5e9919b7e7e9498489c8e5a5ec3246d8", // 替换为你的 API 密钥
@@ -67,9 +70,18 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
                 "response_format": ["type": responseFormat.type]
             ]
             AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
-                if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
-                    print("Raw Response: \(responseString)")
+                if let data = response.value {
+                    let responseJSON = JSON(data)
+                    print(responseJSON)
+                    var message = Message(content: responseJSON["choices"][0]["message"]["content"].stringValue, role: responseJSON["choices"][0]["message"]["role"].stringValue)
+                    print("Message: \(message)")
+                    self.messages.append(message)
+                    self.currentRowCount += 1
+                    self.queryTV.reloadData()
                 }
+//                if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
+//                    print("Raw Response: \(responseString)")
+//                }
 //                switch response.result {
 //                case .success(let value):
 //                    print("Response: \(value)")

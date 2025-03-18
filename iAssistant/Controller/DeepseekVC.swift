@@ -10,8 +10,8 @@ import Alamofire
 import SwiftyJSON
 import Down
 
-class DeepseekVC: UIViewController, UITableViewDelegate, UITextFieldDelegate, UITextViewDelegate {
-    @IBOutlet weak var queryTextField: UITextView!
+class DeepseekVC: UIViewController, UITableViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
+    @IBOutlet weak var queryTextView: UITextView!
     @IBOutlet weak var userView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var queryTV: UITableView!
@@ -28,11 +28,11 @@ class DeepseekVC: UIViewController, UITableViewDelegate, UITextFieldDelegate, UI
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.queryTextField.layer.cornerRadius = 10
+        self.queryTextView.layer.cornerRadius = 10
         
         queryTV.delegate = self
         queryTV.dataSource = self
-        queryTextField.delegate = self
+        queryTextView.delegate = self
         
         // 监听键盘弹出通知
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -41,6 +41,9 @@ class DeepseekVC: UIViewController, UITableViewDelegate, UITextFieldDelegate, UI
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         messages.append(Message(content: "嗨！我是DeepSeek。我可以帮你搜索、答疑、写作，请把你的任务交给我吧～", role: "assistant"))
+        
+        let tapGasture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        view.addGestureRecognizer(tapGasture)
     }
     
     deinit {
@@ -48,23 +51,42 @@ class DeepseekVC: UIViewController, UITableViewDelegate, UITextFieldDelegate, UI
         NotificationCenter.default.removeObserver(self)
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("Return pressed")
-        submitButtonPressed(self.submitButton)
-        textField.resignFirstResponder()
+    // Tap to hide keyboard
+    @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+        queryTextView.resignFirstResponder()
+        keyboardWillHide(Notification(name: UIResponder.keyboardWillHideNotification))
+    }
+    
+    // UIScrollViewDelegate 方法：监听拖动事件
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        // 拖动时收起键盘
+        queryTextView.resignFirstResponder()
+        // 调用键盘收起的逻辑
+        keyboardWillHide(Notification(name: UIResponder.keyboardWillHideNotification))
+    }
+    
+    // Press return to send
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            print("Return pressed")
+            submitButtonPressed(self.submitButton)
+            textView.resignFirstResponder() // 收起键盘
+            textView.text = ""
+            return false // 阻止回车键换行
+        }
         return true
     }
     
     
     @IBAction func submitButtonPressed(_ sender: UIButton) {
-        if self.queryTextField.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-            self.query = queryTextField.text
+        if self.queryTextView.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            self.query = queryTextView.text
             currentRowCount += 1
             queryTV.reloadData()
             
             // Handle response
             print("Start sending request")
-            messages.append(Message(content: self.queryTextField.text, role: "system"))
+            messages.append(Message(content: self.queryTextView.text, role: "system"))
             
             let headers: HTTPHeaders = [
                 "Authorization": "Bearer sk-5e9919b7e7e9498489c8e5a5ec3246d8", // 替换为你的 API 密钥
@@ -113,7 +135,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate, UITextFieldDelegate, UI
     // 键盘收起时调用
     @objc func keyboardWillHide(_ notification: Notification) {
         // 恢复文本框底部的约束
-        bottomConstraint.constant = 0
+        bottomConstraint.constant = 30
 
         // 获取键盘动画的持续时间
         if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {

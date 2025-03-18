@@ -632,7 +632,7 @@
                     <connections>
                         <outlet property="bottomConstraint" destination="K8S-r9-P4o" id="8Yg-BF-mxt"/>
                         <outlet property="queryTV" destination="yOF-nx-etS" id="9bY-w9-6p6"/>
-                        <outlet property="queryTextField" destination="6ez-zj-TYG" id="j8I-uz-Jyt"/>
+                        <outlet property="queryTextView" destination="6ez-zj-TYG" id="j8I-uz-Jyt"/>
                         <outlet property="submitButton" destination="hl7-Z7-u4t" id="1K6-a7-YD9"/>
                         <outlet property="userView" destination="eny-9n-VXm" id="NVp-a9-yvr"/>
                     </connections>

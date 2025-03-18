@@ -10,11 +10,12 @@ import Alamofire
 import SwiftyJSON
 import Down
 
-class DeepseekVC: UIViewController, UITableViewDelegate {
+class DeepseekVC: UIViewController, UITableViewDelegate, UITextFieldDelegate, UITextViewDelegate {
     @IBOutlet weak var queryTextField: UITextView!
     @IBOutlet weak var userView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var queryTV: UITableView!
+    @IBOutlet weak var submitButton: UIButton!
     
     var currentRowCount: Int = 1
     var query: String = ""
@@ -31,6 +32,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
         
         queryTV.delegate = self
         queryTV.dataSource = self
+        queryTextField.delegate = self
         
         // 监听键盘弹出通知
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -46,6 +48,12 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
         NotificationCenter.default.removeObserver(self)
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("Return pressed")
+        submitButtonPressed(self.submitButton)
+        textField.resignFirstResponder()
+        return true
+    }
     
     
     @IBAction func submitButtonPressed(_ sender: UIButton) {
@@ -73,23 +81,13 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
                 if let data = response.value {
                     let responseJSON = JSON(data)
                     print(responseJSON)
-                    var message = Message(content: responseJSON["choices"][0]["message"]["content"].stringValue, role: responseJSON["choices"][0]["message"]["role"].stringValue)
+                    let message = Message(content: responseJSON["choices"][0]["message"]["content"].stringValue, role: responseJSON["choices"][0]["message"]["role"].stringValue)
                     print("Message: \(message)")
                     self.messages.append(message)
                     self.currentRowCount += 1
                     self.queryTV.reloadData()
                 }
-//                if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
-//                    print("Raw Response: \(responseString)")
-//                }
-//                switch response.result {
-//                case .success(let value):
-//                    print("Response: \(value)")
-//                case .failure(let error):
-//                    print("Error: \(error.localizedDescription)")
-//                }
             }
-            print("request done")
         }
     }
 

@@ -483,7 +483,7 @@
                                                 </constraints>
                                                 <color key="textColor" systemColor="labelColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="send"/>
                                             </textView>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="100" translatesAutoresizingMaskIntoConstraints="NO" id="ton-Xd-5pC">
                                                 <rect key="frame" x="0.0" y="44" width="370" height="35"/>
@@ -633,6 +633,7 @@
                         <outlet property="bottomConstraint" destination="K8S-r9-P4o" id="8Yg-BF-mxt"/>
                         <outlet property="queryTV" destination="yOF-nx-etS" id="9bY-w9-6p6"/>
                         <outlet property="queryTextField" destination="6ez-zj-TYG" id="j8I-uz-Jyt"/>
+                        <outlet property="submitButton" destination="hl7-Z7-u4t" id="1K6-a7-YD9"/>
                         <outlet property="userView" destination="eny-9n-VXm" id="NVp-a9-yvr"/>
                     </connections>
                 </viewController>

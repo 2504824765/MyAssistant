@@ -10,7 +10,7 @@ import CoreLocation
 import Alamofire
 import SwiftyJSON
 
-class WeatherInfoVC: UIViewController {
+class WeatherInfoVC: UIViewController, UIGestureRecognizerDelegate {
     let locationManager = CLLocationManager()
     let city = City()
     let weather = Weather()
@@ -22,6 +22,12 @@ class WeatherInfoVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         locationManager.requestLocation()

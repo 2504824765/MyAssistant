@@ -227,3 +227,11 @@ extension DeepseekVC {
         }
     }
 }
+
+extension ChatHistoryTVC {
+    func removeAllChatHistory() {
+        chats.removeAll()
+        saveChatHistoryUsingUserDefaults(chats)
+        delegate?.didFinishingEditChats(chats)
+    }
+}

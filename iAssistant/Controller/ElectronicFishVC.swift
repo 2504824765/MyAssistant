@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ElectronicFishVC: UIViewController {
+class ElectronicFishVC: UIViewController, UIGestureRecognizerDelegate {
     var gongDe: Int64 = 0
     
     private var timer: Timer? //设置自动敲击
@@ -76,6 +76,13 @@ class ElectronicFishVC: UIViewController {
         autoKickSwitch.addTarget(self, action: #selector(autoSwitchChanged(_:)), for: .valueChanged)
         
         self.overrideUserInterfaceStyle = .light
+        
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
 

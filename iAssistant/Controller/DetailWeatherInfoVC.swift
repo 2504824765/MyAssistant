@@ -11,7 +11,7 @@ protocol DetailWeatherInfoVCDelegate {
     func didPressedDetailInfoButton()
 }
 
-class DetailWeatherInfoVC: UIViewController {
+class DetailWeatherInfoVC: UIViewController, UIGestureRecognizerDelegate {
     var detailWeatherInfoVCDelegate: DetailWeatherInfoVCDelegate?
     var weather = Weather()
     
@@ -33,6 +33,12 @@ class DetailWeatherInfoVC: UIViewController {
         // Do any additional setup after loading the view.
         // Set attributes of the large title
         self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 40, weight: .regular)]
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         setViewConfig(feelsLikeView)
         setViewConfig(windView)
         self.displayDetailWeatherInfo()

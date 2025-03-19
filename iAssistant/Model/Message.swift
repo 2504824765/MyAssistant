@@ -7,10 +7,14 @@
 
 import Foundation
 
-struct Message: Codable {
+struct Message: Codable, Equatable {
     var content: String
     var role: String
     var name: String?
+    
+    static func == (lhs: Message, rhs: Message) -> Bool {
+        return lhs.content == rhs.content && lhs.role == rhs.role
+    }
 }
 
 struct ResponseFormat: Codable {

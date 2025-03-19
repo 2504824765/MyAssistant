@@ -11,7 +11,7 @@ import SwiftyJSON
 import CommonCrypto
 import CryptoKit
 
-class TranslateVC: UIViewController, UITableViewDelegate {
+class TranslateVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDelegate {
     var translateHistorys: [TranslateItem] = []
     var to: String = "en"
     var from: String = "zh-CHS"
@@ -57,6 +57,13 @@ class TranslateVC: UIViewController, UITableViewDelegate {
 
         // Do any additional setup after loading the view.
         self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 40, weight: .regular)]
+        
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         
         translateHistoryTV.dataSource = self
         translateHistoryTV.delegate = self

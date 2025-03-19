@@ -10,7 +10,17 @@ import Alamofire
 import SwiftyJSON
 import Down
 
-class DeepseekVC: UIViewController, UITableViewDelegate {
+class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate, UIGestureRecognizerDelegate {
+    func didFinishingEditChats(_ chats: [Chat]) {
+        self.chats = chats
+    }
+    
+    func didChoosedChat(_ chat: Chat) {
+        self.messages = chat.messages
+        currentRowCount = messages.count
+        self.queryTV.reloadData()
+    }
+    
     @IBOutlet weak var queryTextView: UITextView!
     @IBOutlet weak var userView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
@@ -32,6 +42,13 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
         // Do any additional setup after loading the view.
         self.queryTextView.layer.cornerRadius = 10
         
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
         queryTV.delegate = self
         queryTV.dataSource = self
         queryTextView.delegate = self
@@ -48,18 +65,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
         view.addGestureRecognizer(tapGasture)
         
         chats = readChatHistoryUsingUserDefaults()
-        print(chats)
-    }
-    
-    func readChatHistoryUsingUserDefaults() -> [Chat] {
-        if let chatsData = UserDefaults.standard.data(forKey: "AllChats") {
-            do {
-                return try JSONDecoder().decode([Chat].self, from: chatsData)
-            } catch {
-                print("ERROR: Failed to decode chatHistory: \(error)")
-            }
-        }
-        return []
+        print("Current chats: \(chats)")
     }
     
     deinit {
@@ -67,22 +73,9 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
         NotificationCenter.default.removeObserver(self)
     }
     
-    fileprivate func saveChatHistoryUsingUserDefaults(_ chats: [Chat]) {
-        do {
-            let data: Data = try JSONEncoder().encode(chats)
-            UserDefaults.standard.set(data, forKey: "AllChats")
-        } catch {
-            print("Failed to encode chatHistory: \(error)")
-        }
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if messages.count > 1 {
-            let chat: Chat = Chat(messages: self.messages, charID: self.chatID)
-            chats.append(chat)
-            saveChatHistoryUsingUserDefaults(self.chats)
-        }
+        addChatToChats()
     }
     
     // Tap to hide keyboard
@@ -99,7 +92,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
             queryTV.reloadData()
             
             // Handle response
-            print("Start sending request")
+            print("Start sending request. Content: \"\(self.query)\"")
             
             let headers: HTTPHeaders = [
                 "Authorization": "Bearer \(kDeepSeekAPIKey)",
@@ -115,10 +108,10 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
             AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
                 if let data = response.value {
                     let responseJSON = JSON(data)
-//                    print(responseJSON)
+                    print(responseJSON)
                     let message = Message(content: responseJSON["choices"][0]["message"]["content"].stringValue, role: responseJSON["choices"][0]["message"]["role"].stringValue)
-                    self.chatID = responseJSON["id"].stringValue
                     self.messages.append(message)
+                    self.chatID = self.messages[1].content
                     self.currentRowCount += 1
                     self.queryTV.reloadData()
                 }
@@ -149,12 +142,37 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
+    fileprivate func addChatToChats() {
+        // When massages' count > 1
+        if messages.count > 1 {
+            let chat: Chat = Chat(messages: self.messages, chatID: self.messages[1].content)
+            
+            if !chats.contains(chat) {
+                // If one of chats has the same chatID with the new one
+                if let index = chats.firstIndex(where: { $0.chatID == chat.chatID }) {
+                    // Replace the chat with new chat
+                    chats[index] = chat
+                    print("Save: Replace")
+                } else {
+                    // Add new chat
+                    chats.append(chat)
+                    print("Save: Add")
+                }
+                saveChatHistoryUsingUserDefaults(self.chats)
+            } else {
+                print("Have a same request already.")
+            }
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         if segue.identifier == "ChatHistoryID" {
+            addChatToChats()
             let chatHistoryTVC = segue.destination as! ChatHistoryTVC
             chatHistoryTVC.chats = self.chats
+            chatHistoryTVC.delegate = self
         }
     }
 

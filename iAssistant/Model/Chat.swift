@@ -7,7 +7,12 @@
 
 import Foundation
 
-struct Chat: Codable {
+struct Chat: Codable, Equatable {
+    // Implements Equatable protocol
+    static func == (lhs: Chat, rhs: Chat) -> Bool {
+        return lhs.messages == rhs.messages && lhs.chatID == rhs.chatID
+    }
+    
     var messages: [Message]
-    var charID: String
+    var chatID: String
 }

@@ -499,6 +499,9 @@
                                                                     <fontDescription key="titleFontDescription" type="system" pointSize="13"/>
                                                                     <color key="baseForegroundColor" systemColor="darkTextColor"/>
                                                                 </buttonConfiguration>
+                                                                <connections>
+                                                                    <action selector="modelSwitchButtonPressed:" destination="ZYf-yQ-XAB" eventType="touchUpInside" id="qnP-6w-IKY"/>
+                                                                </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ifi-Pj-3Xk">
                                                                 <rect key="frame" x="141" y="0.0" width="94" height="35"/>
@@ -637,6 +640,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="bottomConstraint" destination="K8S-r9-P4o" id="8Yg-BF-mxt"/>
+                        <outlet property="modelSwitchButton" destination="Df0-A8-MSi" id="OQ7-mL-tJc"/>
                         <outlet property="queryTV" destination="yOF-nx-etS" id="9bY-w9-6p6"/>
                         <outlet property="queryTextView" destination="6ez-zj-TYG" id="j8I-uz-Jyt"/>
                         <outlet property="submitButton" destination="hl7-Z7-u4t" id="1K6-a7-YD9"/>

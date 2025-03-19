@@ -8,7 +8,6 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-import Down
 
 class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate, UIGestureRecognizerDelegate {
     func didFinishingEditChats(_ chats: [Chat]) {
@@ -21,6 +20,8 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
         self.queryTV.reloadData()
     }
     
+
+    @IBOutlet weak var modelSwitchButton: UIButton!
     @IBOutlet weak var queryTextView: UITextView!
     @IBOutlet weak var userView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
@@ -30,7 +31,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
     var currentRowCount: Int = 1
     var query: String = ""
     var messages: [Message] = []
-    var model: String = "deepseek-chat"
+    var model: String = kDeepSeekChatModel
 //    var responseFormat: ResponseFormat = ResponseFormat(type: "json_object")
     var responseFormat: ResponseFormat = ResponseFormat(type: "text")
     var chatID: String = ""
@@ -84,6 +85,13 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
         keyboardWillHide(Notification(name: UIResponder.keyboardWillHideNotification))
     }
     
+    @IBAction func modelSwitchButtonPressed(_ sender: Any) {
+        modelSwitchButton.isSelected = !modelSwitchButton.isSelected
+        if modelSwitchButton.isSelected {
+            self.model = kDeepSeekReasonerModel
+        }
+    }
+    
     @IBAction func submitButtonPressed(_ sender: UIButton) {
         if self.queryTextView.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
             self.query = queryTextView.text
@@ -92,7 +100,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
             queryTV.reloadData()
             
             // Handle response
-            print("Start sending request. Content: \"\(self.query)\"")
+            print("Start sending request: \"\(self.query)\"")
             
             let headers: HTTPHeaders = [
                 "Authorization": "Bearer \(kDeepSeekAPIKey)",
@@ -109,7 +117,19 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
                 if let data = response.value {
                     let responseJSON = JSON(data)
                     print(responseJSON)
-                    let message = Message(content: responseJSON["choices"][0]["message"]["content"].stringValue, role: responseJSON["choices"][0]["message"]["role"].stringValue)
+                    var message: Message
+                    let role: String = responseJSON["choices"][0]["message"]["role"].stringValue
+                    var content: String = ""
+                    // If it's a R1 model, then load reasoning-content data
+                    if responseJSON["model"].stringValue == kDeepSeekReasonerModel {
+                        content = responseJSON["choices"][0]["message"]["content"].stringValue
+                        let reasoning_content = responseJSON["choices"][0]["message"]["reasoning_content"].stringValue
+                        message = Message(content: content, role: role)
+                        message.reasoningContent = reasoning_content
+                    } else {
+                        content = responseJSON["choices"][0]["message"]["content"].stringValue
+                        message = Message(content: content, role: role)
+                    }
                     self.messages.append(message)
                     self.chatID = self.messages[1].content
                     self.currentRowCount += 1

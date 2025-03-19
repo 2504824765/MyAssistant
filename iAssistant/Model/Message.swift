@@ -11,6 +11,7 @@ struct Message: Codable, Equatable {
     var content: String
     var role: String
     var name: String?
+    var reasoningContent: String?
     
     static func == (lhs: Message, rhs: Message) -> Bool {
         return lhs.content == rhs.content && lhs.role == rhs.role

@@ -27,6 +27,10 @@ let kDeepSeekAPIKey = "sk-5e9919b7e7e9498489c8e5a5ec3246d8"
 
 let kDeepSeekBaseURL = "https://api.deepseek.com/chat/completions"
 
+let kDeepSeekChatModel = "deepseek-chat"
+
+let kDeepSeekReasonerModel = "deepseek-reasoner"
+
 enum Languege {
     case English
     case Chinese

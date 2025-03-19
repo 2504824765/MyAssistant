@@ -27,6 +27,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var queryTV: UITableView!
     @IBOutlet weak var submitButton: UIButton!
+    @IBOutlet weak var newChatButton: UIBarButtonItem!
     
     var currentRowCount: Int = 1
     var query: String = ""
@@ -45,10 +46,12 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
         
         // Hide navigation back button
         navigationItem.hidesBackButton = true
-        navigationItem.leftBarButtonItem = nil
+//        navigationItem.leftBarButtonItem = nil
         // Set slide back enabeld
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
+        self.navigationItem.leftBarButtonItem?.image = UIImage(systemName: "plus.circle.fill")
         
         queryTV.delegate = self
         queryTV.dataSource = self
@@ -83,6 +86,25 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
     @objc func handleTap(_ gesture: UITapGestureRecognizer) {
         queryTextView.resignFirstResponder()
         keyboardWillHide(Notification(name: UIResponder.keyboardWillHideNotification))
+    }
+    
+    @IBAction func netSearchButtonPressed(_ sender: Any) {
+        let alert = UIAlertController(title: "提示", message: "暂不支持此功能", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func newChatButtonPressed(_ sender: UIBarButtonItem) {
+        let alert = UIAlertController(title: "提示", message: "你确定要开启新对话吗？", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+            self.addChatToChats()
+            self.messages = [Message(content: "嗨！我是DeepSeek。我可以帮你搜索、答疑、写作，请把你的任务交给我吧～", role: "system")]
+            self.currentRowCount = self.messages.count
+            self.queryTV.reloadData()
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func modelSwitchButtonPressed(_ sender: Any) {

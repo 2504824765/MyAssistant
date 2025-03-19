@@ -511,6 +511,9 @@
                                                                     <fontDescription key="titleFontDescription" type="system" pointSize="13"/>
                                                                     <color key="baseForegroundColor" systemColor="darkTextColor"/>
                                                                 </buttonConfiguration>
+                                                                <connections>
+                                                                    <action selector="netSearchButtonPressed:" destination="ZYf-yQ-XAB" eventType="touchUpInside" id="aeK-n5-8wv"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
@@ -632,6 +635,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="DeepSeek" largeTitleDisplayMode="never" id="pqj-8N-VTh">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="8ZL-ho-nny">
+                            <connections>
+                                <action selector="newChatButtonPressed:" destination="ZYf-yQ-XAB" id="Gwo-8V-NfC"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Item" image="list.bullet" catalog="system" id="6lp-Ou-jdK">
                             <connections>
                                 <segue destination="uAi-Ta-W57" kind="show" identifier="ChatHistoryID" id="gpM-1q-sne"/>
@@ -641,6 +649,7 @@
                     <connections>
                         <outlet property="bottomConstraint" destination="K8S-r9-P4o" id="8Yg-BF-mxt"/>
                         <outlet property="modelSwitchButton" destination="Df0-A8-MSi" id="OQ7-mL-tJc"/>
+                        <outlet property="newChatButton" destination="8ZL-ho-nny" id="upI-Vh-j7r"/>
                         <outlet property="queryTV" destination="yOF-nx-etS" id="9bY-w9-6p6"/>
                         <outlet property="queryTextView" destination="6ez-zj-TYG" id="j8I-uz-Jyt"/>
                         <outlet property="submitButton" destination="hl7-Z7-u4t" id="1K6-a7-YD9"/>

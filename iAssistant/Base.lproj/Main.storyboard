@@ -237,7 +237,6 @@
                                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="26"/>
                                         </buttonConfiguration>
                                         <connections>
-                                            <action selector="optionSelection:" destination="XHd-I3-lyS" eventType="touchUpInside" id="Y1J-B4-rbu"/>
                                             <action selector="searchButtonPressed:" destination="XHd-I3-lyS" eventType="touchUpInside" id="w7i-JG-hYq"/>
                                         </connections>
                                     </button>
@@ -336,7 +335,7 @@
                                 <color key="textColor" systemColor="groupTableViewBackgroundColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="vsvsvsvsvs" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nLF-lR-iLB">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="翻译结果显示在这里" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nLF-lR-iLB">
                                 <rect key="frame" x="16" y="297" width="365" height="39"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="39" id="3H3-OK-7xR"/>
@@ -346,44 +345,186 @@
                                 <color key="textColor" systemColor="groupTableViewBackgroundColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="h6A-Rd-gyb">
-                                <rect key="frame" x="106.66666666666667" y="226" width="188.66666666666663" height="36"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Lr5-5T-W0l">
+                                <rect key="frame" x="54.333333333333343" y="226" width="293.33333333333326" height="34"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="目标语言：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="stt-61-KTk">
-                                        <rect key="frame" x="0.0" y="0.0" width="86.666666666666671" height="36"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <color key="textColor" systemColor="secondarySystemBackgroundColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KvV-2H-ddK">
-                                        <rect key="frame" x="91.666666666666686" y="0.0" width="97" height="36"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <menu key="menu" id="G8t-mw-ojK">
-                                            <children>
-                                                <command title="To Chinese" id="GNr-sW-DQ8">
-                                                    <connections>
-                                                        <action selector="optionSelection:" destination="js1-tH-HGu" id="Lky-he-0wO"/>
-                                                    </connections>
-                                                </command>
-                                                <command title="To English" id="cLg-EA-869">
-                                                    <connections>
-                                                        <action selector="optionSelection:" destination="js1-tH-HGu" id="j8j-BL-kfN"/>
-                                                    </connections>
-                                                </command>
-                                            </children>
-                                        </menu>
-                                        <state key="normal" title="To Chinese">
-                                            <color key="titleColor" systemColor="groupTableViewBackgroundColor"/>
-                                        </state>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="WSO-Pr-c4s">
+                                        <rect key="frame" x="0.0" y="0.0" width="121.66666666666667" height="34"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="起始语言：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wx1-yE-aSF">
+                                                <rect key="frame" x="0.0" y="0.0" width="80.666666666666671" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                <color key="textColor" systemColor="secondarySystemBackgroundColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7N-gU-arH">
+                                                <rect key="frame" x="85.666666666666657" y="0.0" width="36" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                <menu key="menu" id="VpH-93-8eF">
+                                                    <children>
+                                                        <command title="auto" id="eqO-W3-0oE">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="Rwo-NK-Lmh"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Chinese" id="WD3-eE-qcc">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="c7K-p8-kDJ"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="English" id="EKR-4R-oZN">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="yzh-lA-0Ex"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="French" id="NIV-c6-kya">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="uIm-Uy-4t6"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Arabic" id="bWz-rs-dmu">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="PcV-4v-k2O"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="German" id="WnT-Vt-Fo5">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="EZr-9v-NVl"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Spanish" id="OXg-Ou-b4g">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="cIu-Ci-krd"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Italian" id="24i-Pg-LyG">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="OMA-eo-Yoq"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Japanese" id="T3R-We-N8K">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="gbN-Fp-8Fc"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Korean" id="E82-uQ-mEE">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="WrP-P2-10O"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Portuguese" id="Zr2-lq-JcN">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="UVI-7G-4Xi"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Russian" id="A8F-nW-0Jz">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="2Ow-kx-If8"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Vietnamese" id="JhY-EB-Twj">
+                                                            <connections>
+                                                                <action selector="fromSelection:" destination="js1-tH-HGu" id="D4c-EI-owx"/>
+                                                            </connections>
+                                                        </command>
+                                                    </children>
+                                                </menu>
+                                                <state key="normal" title="auto">
+                                                    <color key="titleColor" systemColor="secondarySystemBackgroundColor"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="h6A-Rd-gyb">
+                                        <rect key="frame" x="141.66666666666669" y="0.0" width="151.66666666666669" height="34"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="目标语言：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="stt-61-KTk">
+                                                <rect key="frame" x="0.0" y="0.0" width="80.666666666666671" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                <color key="textColor" systemColor="secondarySystemBackgroundColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KvV-2H-ddK">
+                                                <rect key="frame" x="85.666666666666686" y="0.0" width="66" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                <menu key="menu" id="G8t-mw-ojK">
+                                                    <children>
+                                                        <command title="Chinese" id="GNr-sW-DQ8">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="Lky-he-0wO"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="English" id="cLg-EA-869">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="j8j-BL-kfN"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="French" id="mnx-8b-cdq">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="Nwi-Vm-k0g"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Arabic" id="gX3-Lt-llH">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="dsg-Ci-TOd"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="German" id="HIZ-Xk-bOi">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="fx7-0e-iCc"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Spanish" id="sdJ-jD-9E2">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="KAV-l7-Qn7"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Italian" id="Jrr-AH-qhL">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="pHj-Vg-Rwi"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Japanese" id="XMK-X3-tSK">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="Bwf-d6-NOQ"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Korean" id="itJ-Nj-gVj">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="rES-14-Tz2"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Portuguese" id="ZLZ-u0-Qix">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="pAF-CX-gk6"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Russian" id="lk3-gd-lYG">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="Lmn-FK-58f"/>
+                                                            </connections>
+                                                        </command>
+                                                        <command title="Vietnamese" id="Sos-K0-IUR">
+                                                            <connections>
+                                                                <action selector="toSelection:" destination="js1-tH-HGu" id="prS-Cp-l74"/>
+                                                            </connections>
+                                                        </command>
+                                                    </children>
+                                                </menu>
+                                                <state key="normal" title="Chinese">
+                                                    <color key="titleColor" systemColor="groupTableViewBackgroundColor"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="bIQ-Xt-tUD"/>
                         <color key="backgroundColor" systemColor="viewFlipsideBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Lr5-5T-W0l" firstAttribute="top" secondItem="x3V-xG-AZV" secondAttribute="bottom" constant="15" id="0LL-Iw-JXh"/>
                             <constraint firstAttribute="trailing" secondItem="x3V-xG-AZV" secondAttribute="trailing" constant="16" id="5V4-L7-blP"/>
-                            <constraint firstItem="h6A-Rd-gyb" firstAttribute="top" secondItem="x3V-xG-AZV" secondAttribute="bottom" constant="15" id="67j-lJ-kFb"/>
                             <constraint firstItem="MTB-Dp-b4U" firstAttribute="leading" secondItem="bIQ-Xt-tUD" secondAttribute="leading" constant="16.329999999999998" id="6Pi-4x-iD1"/>
                             <constraint firstItem="x3V-xG-AZV" firstAttribute="top" secondItem="bIQ-Xt-tUD" secondAttribute="top" constant="5" id="F0M-PA-6dr"/>
                             <constraint firstItem="nLF-lR-iLB" firstAttribute="top" secondItem="m3E-n4-wJu" secondAttribute="bottom" constant="7.6699999999999999" id="I9y-da-kH1"/>
@@ -393,15 +534,16 @@
                             <constraint firstItem="Mcn-Rh-LIu" firstAttribute="centerX" secondItem="Tep-WE-5kN" secondAttribute="centerX" id="Tl6-1O-Mjs"/>
                             <constraint firstItem="Mcn-Rh-LIu" firstAttribute="bottom" secondItem="bIQ-Xt-tUD" secondAttribute="bottom" id="eS5-4n-X1f"/>
                             <constraint firstItem="Mcn-Rh-LIu" firstAttribute="trailing" secondItem="MTB-Dp-b4U" secondAttribute="trailing" id="nEd-lW-ZeQ"/>
-                            <constraint firstItem="h6A-Rd-gyb" firstAttribute="centerX" secondItem="Tep-WE-5kN" secondAttribute="centerX" id="rbu-C5-GA9"/>
                             <constraint firstItem="nLF-lR-iLB" firstAttribute="leading" secondItem="bIQ-Xt-tUD" secondAttribute="leading" constant="16" id="tw5-QD-trF"/>
+                            <constraint firstItem="Lr5-5T-W0l" firstAttribute="centerX" secondItem="Tep-WE-5kN" secondAttribute="centerX" id="uq2-TW-oLT"/>
                             <constraint firstItem="Mcn-Rh-LIu" firstAttribute="leading" secondItem="nLF-lR-iLB" secondAttribute="leading" id="wJ5-aT-d89"/>
                             <constraint firstItem="m3E-n4-wJu" firstAttribute="leading" secondItem="bIQ-Xt-tUD" secondAttribute="leading" constant="16" id="wJU-sm-TlM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="在线翻译" largeTitleDisplayMode="always" id="p9B-jZ-wkl"/>
                     <connections>
-                        <outlet property="languageButton" destination="KvV-2H-ddK" id="WUt-Mo-fF7"/>
+                        <outlet property="fromLanguegeButton" destination="R7N-gU-arH" id="0pT-E3-pKt"/>
+                        <outlet property="toLanguegeButton" destination="KvV-2H-ddK" id="WUt-Mo-fF7"/>
                         <outlet property="translateHistoryTV" destination="Mcn-Rh-LIu" id="wiW-81-UlQ"/>
                         <outlet property="translateResultLabel" destination="nLF-lR-iLB" id="QYT-vN-bay"/>
                         <outlet property="translateTextField" destination="9aS-XI-jMm" id="fs9-Vy-cV0"/>

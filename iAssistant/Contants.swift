@@ -33,7 +33,30 @@ let kDeepSeekReasonerModel = "deepseek-reasoner"
 
 let kTranslateHistoryCellID = "TranslateHistoryCellID"
 
-enum Languege {
-    case English
-    case Chinese
-}
+let kEnglish = "English"
+let kChinese = "Chinese"
+let kFrench = "French"
+let kArabic = "Arabic"
+let kGerman = "German"
+let kSpanish = "Spanish"
+let kItalian = "Italian"
+let kJapanese = "Japanese"
+let kKorean = "Korean"
+let kPortuguese = "Portuguese"
+let kRussian = "Russian"
+let kVietnamese = "Vietnamese"
+
+var dic: [String: String] = [
+    "Chinese": "zh-CHS",
+    "English": "en",
+    "French": "fr",
+    "Arabic": "ar",
+    "German": "de",
+    "Spanish": "es",
+    "Italian": "it",
+    "Japanese": "ja",
+    "Korean": "ko",
+    "Portuguese": "pt",
+    "Russian": "ru",
+    "Vietnamese": "vi",
+]

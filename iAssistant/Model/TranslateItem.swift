@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TranslateItem: Codable {
+class TranslateItem: Codable, Equatable {
     var originText: String
     var translateText: String
     var l: String
@@ -16,5 +16,12 @@ class TranslateItem: Codable {
         self.originText = originText
         self.translateText = translateText
         self.l = l
+    }
+    
+    // 实现 Equatable 协议
+    static func == (lhs: TranslateItem, rhs: TranslateItem) -> Bool {
+        return lhs.originText == rhs.originText &&
+               lhs.translateText == rhs.translateText &&
+               lhs.l == rhs.l
     }
 }

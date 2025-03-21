@@ -64,6 +64,7 @@ class ChatHistoryTVC: UITableViewController, UIGestureRecognizerDelegate {
 
     @IBAction func deleteButtonPressed(_ sender: Any) {
         let alert = UIAlertController(title: "提示", message: "你确定要清除所有的历史记录吗？", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel))
         alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .destructive, handler: { _ in
             self.removeAllChatHistory()
             self.chatHistoryTV.reloadData()

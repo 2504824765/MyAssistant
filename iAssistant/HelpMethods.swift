@@ -114,10 +114,13 @@ extension TranslateVC {
                     translateItem = TranslateItem(originText: originText, translateText: translateText, l: l)
                     print("小语种")
                 }
-                if !self.translateHistorys.contains(where: { $0 === translateItem }) {
+                if !self.translateHistorys.contains(where: { $0 == translateItem }) {
                     self.translateHistorys.append(translateItem)
+                    print("Save mode: Add")
                     saveHistorysUsingUserDefaults(historys: self.translateHistorys)
                     self.translateHistoryTV.reloadData()
+                } else {
+                    print("Save mode: Do nothing")
                 }
                 
                 if let translation = json["translation"].array?.first?.string {

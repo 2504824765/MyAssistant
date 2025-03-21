@@ -25,13 +25,13 @@ class TranslateVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDel
     @IBOutlet weak var pullDownButton: UIBarButtonItem!
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
-        let alert = UIAlertController(title: "提示", message: "你确定要开启清除记录吗？", preferredStyle: .alert)
+        let alert = UIAlertController(title: "提示", message: "你确定要清除所有记录吗？", preferredStyle: .alert)
         // Add Cancel Button
         alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel, handler: { _ in
             
         }))
         // Add Confirm Button
-        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .destructive, handler: { _ in
             self.translateHistorys = []
             self.translateHistoryTV.reloadData()
             saveHistorysUsingUserDefaults(historys: self.translateHistorys)
@@ -156,21 +156,6 @@ class TranslateVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDel
         }
         print(self.from)
     }
-    
-    var dic: [String: String] = [
-        "Chinese": "zh-CHS",
-        "English": "en",
-        "French": "fr",
-        "Arabic": "ar",
-        "German": "de",
-        "Spanish": "es",
-        "Italian": "it",
-        "Japanese": "ja",
-        "Korean": "ko",
-        "Portuguese": "pt",
-        "Russian": "ru",
-        "Vietnamese": "vi",
-    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()

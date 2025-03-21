@@ -15,7 +15,7 @@ extension TranslateVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Reuse cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TranslateHistoryCellID", for: indexPath) as! TranslateHistoryCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: kTranslateHistoryCellID, for: indexPath) as! TranslateHistoryCell
         // Add content to cell
         cell.lLabel.layer.cornerRadius = 10
         cell.lLabel.layer.masksToBounds = true
@@ -31,5 +31,17 @@ extension TranslateVC: UITableViewDataSource {
         return cell
     }
     
+    // Override to support editing the table view.
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            translateHistorys.remove(at: indexPath.row)
+            saveHistorysUsingUserDefaults(historys: translateHistorys)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
     
 }

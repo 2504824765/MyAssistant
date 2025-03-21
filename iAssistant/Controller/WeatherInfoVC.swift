@@ -33,6 +33,7 @@ class WeatherInfoVC: UIViewController, UIGestureRecognizerDelegate {
         locationManager.requestLocation()
         
         self.overrideUserInterfaceStyle = .light
+        ProgressHUD.animate("正在获取地理信息...", interaction: false)
     }
     
     // MARK: - Navigation

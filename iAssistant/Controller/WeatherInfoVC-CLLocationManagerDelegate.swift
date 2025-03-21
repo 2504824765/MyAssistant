@@ -24,6 +24,7 @@ extension WeatherInfoVC: CLLocationManagerDelegate {
                     let weatherJSON = JSON(data)
                     self.setWeatherProperties(weatherJSON)
                     self.displayWeatherInfo()
+                    ProgressHUD.dismiss()
                 }
             }
         }

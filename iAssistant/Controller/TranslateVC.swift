@@ -23,6 +23,21 @@ class TranslateVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDel
     @IBOutlet weak var translateHistoryTV: UITableView!
     @IBOutlet weak var pullDownButton: UIBarButtonItem!
     
+    @IBAction func deleteButtonPressed(_ sender: Any) {
+        let alert = UIAlertController(title: "提示", message: "你确定要开启清除记录吗？", preferredStyle: .alert)
+        // Add Cancel Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel, handler: { _ in
+            
+        }))
+        // Add Confirm Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+            self.translateHistorys = []
+            self.translateHistoryTV.reloadData()
+            saveHistorysUsingUserDefaults(historys: self.translateHistorys)
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     @IBAction func searchButtonPressed(_ sender: UIButton) {
         print("editDone")
         let originString = translateTextField.text
@@ -37,16 +52,23 @@ class TranslateVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDel
         }
     }
     
+    // Tap to hide keyboard
+    @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+        translateTextField.resignFirstResponder()
+    }
+    
     @IBAction func translateTextFieldEndEditing(_ sender: UITextField) {
 
     }
     
     @IBAction func optionSelection(_ sender: UIAction) {
-        self.languageButton.setTitle(sender.title, for: .normal)
-        if sender.title == "Chinese" {
+        translateTextField.resignFirstResponder()
+        if sender.title == "To Chinese" {
+            self.languageButton.setTitle(self.languageButton.menu?.children[0].title, for: .normal)
             self.to = "zh-CHS"
             self.from = "en"
-        } else if sender.title == "English" {
+        } else if sender.title == "To English" {
+            self.languageButton.setTitle(self.languageButton.menu?.children[1].title, for: .normal)
             self.to = "en"
             self.from = "zh-CHS"
         }
@@ -68,6 +90,8 @@ class TranslateVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDel
         translateHistoryTV.dataSource = self
         translateHistoryTV.delegate = self
         translateTextField.attributedPlaceholder = NSAttributedString(string: "任意语言翻译...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        
+        languageButton.setTitle(languageButton.menu?.children[0].title, for: .normal)
         
         self.overrideUserInterfaceStyle = .light
         

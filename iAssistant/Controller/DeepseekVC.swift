@@ -46,7 +46,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
         
         // Hide navigation back button
         navigationItem.hidesBackButton = true
-//        navigationItem.leftBarButtonItem = nil
+        //        navigationItem.leftBarButtonItem = nil
         // Set slide back enabeld
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
@@ -98,6 +98,11 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
     
     @IBAction func newChatButtonPressed(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "提示", message: "你确定要开启新对话吗？", preferredStyle: .alert)
+        // Add Cancel Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel, handler: { _ in
+            
+        }))
+        // Add Confirm Button
         alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
             self.addChatToChats()
             self.messages = [Message(content: "嗨！我是DeepSeek。我可以帮你搜索、答疑、写作，请把你的任务交给我吧～", role: "system")]
@@ -115,6 +120,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
     }
     
     @IBAction func submitButtonPressed(_ sender: UIButton) {
+        ProgressHUD.animate("请耐心等待...", .ballVerticalBounce)
         if self.queryTextView.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
             self.query = queryTextView.text
             messages.append(Message(content: self.queryTextView.text, role: "user"))
@@ -156,6 +162,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate, ChatHistortTVCDelegate,
                     self.chatID = self.messages[1].content
                     self.currentRowCount += 1
                     self.queryTV.reloadData()
+                    ProgressHUD.dismiss()
                 }
             }
             scrollToBottom()

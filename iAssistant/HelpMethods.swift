@@ -76,13 +76,12 @@ extension TranslateVC {
         let url = kYDTranslateBaseURL
         let salt = String(Int.random(in: 1..<10000))
         let curtime = String(Int(Date().timeIntervalSince1970))
-        let encodedText = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? text
-        let truncatedText = truncate(encodedText)
+        let truncatedText = truncate(text)
         let signStr = appKey + truncatedText + salt + curtime + appSecret
         let sign = signStr.sha256()
         
         let parameters: [String: Any] = [
-            "q": encodedText,
+            "q": text,
             "from": from,
             "to": to,
             "appKey": appKey,
@@ -97,11 +96,28 @@ extension TranslateVC {
             case .success(let value):
                 let json = JSON(value)
                 print("响应JSON: \(json)")
-                let translateItem = TranslateItem(originText: json["query"].stringValue, translateText: json["translation"][0].stringValue, l: json["l"].stringValue)
+                
+                // If it's en2zh-CHS
+                let translateItem: TranslateItem
+                let originText = json["query"].stringValue
+                let translateText = json["translation"][0].stringValue
+                let l = json["l"].stringValue
+                if l == "en2zh-CHS" {
+                    let translateText = translateText.removingPercentEncoding
+                    print("Decoded translateText while en2zh-CHS: \(String(describing: translateText))")
+                    translateItem = TranslateItem(originText: originText, translateText: translateText ?? "ERROR: Failed to decode: \(String(describing: translateText))", l: l)
+                } else if l == "zh-CHS2en" { // If it's zh-CHS2en
+                    let originText = originText.removingPercentEncoding
+                    print("Decoded originText while zh-CHS2en: \(String(describing: originText))")
+                    translateItem = TranslateItem(originText: originText ?? "ERROR: Failed to decode: \(String(describing: originText))", translateText: translateText, l: l)
+                } else { // If it's not English or Chinese
+                    translateItem = TranslateItem(originText: originText, translateText: translateText, l: l)
+                    print("小语种")
+                }
                 if !self.translateHistorys.contains(where: { $0 === translateItem }) {
                     self.translateHistorys.append(translateItem)
                     saveHistorysUsingUserDefaults(historys: self.translateHistorys)
-                    print("save success")
+                    self.translateHistoryTV.reloadData()
                 }
                 
                 if let translation = json["translation"].array?.first?.string {

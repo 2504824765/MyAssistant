@@ -31,6 +31,8 @@ let kDeepSeekChatModel = "deepseek-chat"
 
 let kDeepSeekReasonerModel = "deepseek-reasoner"
 
+let kTranslateHistoryCellID = "TranslateHistoryCellID"
+
 enum Languege {
     case English
     case Chinese

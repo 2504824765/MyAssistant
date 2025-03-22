@@ -13,7 +13,7 @@ protocol ChatHistortTVCDelegate {
     func didChoosedChat(_ chat: Chat)
 }
 
-class ChatHistoryTVC: UITableViewController, UIGestureRecognizerDelegate {
+class ChatHistoryTVC: UITableViewController {
     var chats: [Chat] = []
     var delegate: ChatHistortTVCDelegate?
 

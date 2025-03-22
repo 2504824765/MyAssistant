@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DeepseekVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDelegate {
+class DeepseekVC: UIViewController, UITableViewDelegate {
     @IBOutlet weak var modelSwitchButton: UIButton!
     @IBOutlet weak var queryTextView: UITextView!
     @IBOutlet weak var userView: UIView!
@@ -15,6 +15,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDele
     @IBOutlet weak var queryTV: UITableView!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var newChatButton: UIBarButtonItem!
+    @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
     
     var currentRowCount: Int = 1
     var query: String = ""
@@ -40,12 +41,6 @@ class DeepseekVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDele
         addChatToChats()
     }
     
-    // Tap to hide keyboard
-    @objc func handleTap(_ gesture: UITapGestureRecognizer) {
-        queryTextView.resignFirstResponder()
-        keyboardWillHide(Notification(name: UIResponder.keyboardWillHideNotification))
-    }
-    
     @IBAction func netSearchButtonPressed(_ sender: Any) {
         alert_netSearchNotAvailable()
     }
@@ -66,6 +61,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDele
             sendDeepSeekAPIRequest()
         } else {
             queryTextView.text = ""
+            ProgressHUD.error("请输入内容")
         }
     }
     

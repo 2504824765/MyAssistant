@@ -13,7 +13,7 @@ extension DeepseekVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             submitButtonPressed(self.submitButton)
-            textView.resignFirstResponder() // 收起键盘
+            textView.resignFirstResponder()
             textView.text = ""
             return false // 阻止回车键换行
         }

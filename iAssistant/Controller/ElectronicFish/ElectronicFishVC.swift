@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ElectronicFishVC: UIViewController, UIGestureRecognizerDelegate {
+class ElectronicFishVC: UIViewController {
     var gongDe: Int64 = 0
     
     private var timer: Timer? //设置自动敲击

@@ -59,4 +59,5 @@ var dic: [String: String] = [
     "Portuguese": "pt",
     "Russian": "ru",
     "Vietnamese": "vi",
+    "auto": "auto"
 ]

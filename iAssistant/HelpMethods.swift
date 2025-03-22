@@ -236,6 +236,11 @@ extension TranslateVC {
         
         // Set only light mode
         self.overrideUserInterfaceStyle = .light
+        
+        // 添加轻击手势识别器
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        tapGesture.delegate = self
+        view.addGestureRecognizer(tapGesture)
     }
     
     func loadHistory() {
@@ -398,6 +403,7 @@ extension DeepseekVC {
             if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                 let keyboardHeight = keyboardFrame.height
                 bottomConstraint.constant = keyboardHeight + 10
+                scrollToBottom()
             }
         } else {
             bottomConstraint.constant = 30
@@ -408,7 +414,6 @@ extension DeepseekVC {
                 self.view.layoutIfNeeded()
             }
         }
-        scrollToBottom()
     }
     
     // Scroll to bottom
@@ -475,8 +480,10 @@ extension DeepseekVC {
     func sendDeepSeekAPIRequest() {
         ProgressHUD.animate("请耐心等待...", .ballVerticalBounce)
         queryTextView.resignFirstResponder()
-        queryTextView.text = ""
-        self.query = queryTextView.text
+        query = queryTextView.text
+        if query.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            return
+        }
         messages.append(Message(content: self.queryTextView.text, role: "user"))
         currentRowCount += 1
         queryTV.reloadData()

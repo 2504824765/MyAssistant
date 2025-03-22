@@ -208,7 +208,7 @@
                                                 <color key="backgroundColor" systemColor="viewFlipsideBackgroundColor"/>
                                                 <color key="textColor" systemColor="groupTableViewBackgroundColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" returnKeyType="send"/>
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5g0-X6-mXs">
                                                 <rect key="frame" x="0.0" y="43" width="318" height="3"/>
@@ -539,6 +539,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="在线翻译" largeTitleDisplayMode="always" id="p9B-jZ-wkl"/>
                     <connections>
+                        <outlet property="commitButton" destination="TRx-1J-xKK" id="GPS-1g-t6m"/>
                         <outlet property="fromLanguegeButton" destination="R7N-gU-arH" id="0pT-E3-pKt"/>
                         <outlet property="toLanguegeButton" destination="KvV-2H-ddK" id="WUt-Mo-fF7"/>
                         <outlet property="translateHistoryTV" destination="Mcn-Rh-LIu" id="wiW-81-UlQ"/>
@@ -821,6 +822,7 @@
                         <outlet property="queryTV" destination="yOF-nx-etS" id="9bY-w9-6p6"/>
                         <outlet property="queryTextView" destination="6ez-zj-TYG" id="j8I-uz-Jyt"/>
                         <outlet property="submitButton" destination="hl7-Z7-u4t" id="1K6-a7-YD9"/>
+                        <outlet property="tableViewBottomConstraint" destination="ZEU-pD-gJh" id="yq8-hd-LRM"/>
                         <outlet property="userView" destination="eny-9n-VXm" id="NVp-a9-yvr"/>
                     </connections>
                 </viewController>

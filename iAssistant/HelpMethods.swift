@@ -10,8 +10,37 @@ import Alamofire
 import SwiftyJSON
 import CryptoKit
 import CommonCrypto
+import Down
+import CoreLocation
 
+// MARK: - iAssistanttableVC
+extension iAssistantTableVC {
+    func setupUI() {
+        translateIconImageView.layer.cornerRadius = 10
+        electronicFishIcon.layer.cornerRadius = 10
+        
+        self.overrideUserInterfaceStyle = .light
+        
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 40, weight: .regular)]
+    }
+}
+
+// MARK: - WeatherInfoVC
 extension WeatherInfoVC {
+    func setupUI() {
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        locationManager.delegate = self
+        locationManager.requestLocation()
+        
+        self.overrideUserInterfaceStyle = .light
+        ProgressHUD.animate("正在获取地理信息...", interaction: false)
+    }
+    
     func displayCityInfo(_ response: AFDataResponse<Any>) {
         if let data = response.value {
             let cityInfoJSON = JSON(data)
@@ -41,8 +70,27 @@ extension WeatherInfoVC {
         self.weather.windDir = weatherJSON["now"]["windDir"].stringValue
         self.weather.windSpeed = weatherJSON["now"]["windSpeed"].stringValue
     }
+    
+    func requestWeatherInfo(_ lon: CLLocationDegrees, _ lat: CLLocationDegrees) {
+        // Get the city name from current location
+        AF.request("\(kQCityInfoBaseURL)?location=\(lon),\(lat)&key=\(kQWeatherAPIKey)").responseJSON { response in
+            self.displayCityInfo(response)
+            // Get current city's weather information
+            AF.request("\(kQWeatherInfoBaseURL)?location=\(self.city.cityID!)&key=\(kQWeatherAPIKey)").responseJSON { response in
+                if let data = response.value {
+                    let weatherJSON = JSON(data)
+                    self.setWeatherProperties(weatherJSON)
+                    self.displayWeatherInfo()
+                    ProgressHUD.dismiss()
+                } else {
+                    ProgressHUD.error("未知错误\n请联系开发者 ")
+                }
+            }
+        }
+    }
 }
 
+// MARK: - DetailWeatherInfoVC
 extension DetailWeatherInfoVC {
     func setViewConfig(_ view: UIView) {
         view.layer.cornerRadius = 15
@@ -69,8 +117,24 @@ extension DetailWeatherInfoVC {
         }
         tempLabel.text = "实际温度：\(weather.temp!)˚"
     }
+    
+    func setupUI() {
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 40, weight: .regular)]
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        setViewConfig(feelsLikeView)
+        setViewConfig(windView)
+        self.displayDetailWeatherInfo()
+        
+        self.overrideUserInterfaceStyle = .light
+    }
 }
 
+// MARK: - TranslateVC
 extension TranslateVC {
     func translateText(text: String, from: String, to: String, appKey: String, appSecret: String, completion: @escaping (String?, Error?) -> Void) {
         let url = kYDTranslateBaseURL
@@ -114,10 +178,19 @@ extension TranslateVC {
                     translateItem = TranslateItem(originText: originText, translateText: translateText, l: l)
                     print("小语种")
                 }
-                if !self.translateHistorys.contains(where: { $0 == translateItem }) {
-                    self.translateHistorys.append(translateItem)
+                var errorCode = json["errorCode"].stringValue
+                if errorCode != "0" {
+                    if errorCode == "401" {
+                        ProgressHUD.error("Error code: \(errorCode)\n开发者API欠费，请联系开发者")
+                        return
+                    }
+                    ProgressHUD.error("Error code: \(errorCode)\n请联系开发者")
+                    return
+                }
+                if !self.translateHistory.contains(where: { $0 == translateItem }) {
+                    self.translateHistory.append(translateItem)
                     print("Save mode: Add")
-                    saveHistorysUsingUserDefaults(historys: self.translateHistorys)
+                    saveHistorysUsingUserDefaults(historys: self.translateHistory)
                     self.translateHistoryTV.reloadData()
                 } else {
                     print("Save mode: Do nothing")
@@ -146,8 +219,64 @@ extension TranslateVC {
             return String(start + end)
         }
     }
+    
+    func setupUI() {
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 40, weight: .regular)]
+        
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
+        translateHistoryTV.dataSource = self
+        translateHistoryTV.delegate = self
+        translateTextField.attributedPlaceholder = NSAttributedString(string: "任意语言翻译...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        
+        // Set only light mode
+        self.overrideUserInterfaceStyle = .light
+    }
+    
+    func loadHistory() {
+        translateHistory = readHistoryUsingUserDefaults()
+    }
+    
+    func setupTranslateTVUI(_ cell: TranslateHistoryCell, _ indexPath: IndexPath) {
+        cell.lLabel.layer.cornerRadius = 10
+        cell.lLabel.layer.masksToBounds = true
+        cell.originTextLabel.text = translateHistory[indexPath.row].originText
+        cell.translateText.text = translateHistory[indexPath.row].translateText
+        if translateHistory[indexPath.row].l == "en2zh-CHS" {
+            cell.lLabel.text = "英译中"
+        } else if translateHistory[indexPath.row].l == "zh-CHS2en" {
+            cell.lLabel.text = "中译英"
+        } else {
+            cell.lLabel.text = "小语种"
+        }
+    }
+    
+    func deleteAllTranslateHistory() {
+        translateHistory = []
+        translateHistoryTV.reloadData()
+        saveHistorysUsingUserDefaults(historys: self.translateHistory)
+    }
+    
+    func alert_AreYouSure2DeleteAllTranslateHistory() {
+        let alert = UIAlertController(title: "提示", message: "你确定要清除所有记录吗？", preferredStyle: .alert)
+        // Add Cancel Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel, handler: { _ in
+            
+        }))
+        // Add Confirm Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .destructive, handler: { _ in
+            self.deleteAllTranslateHistory()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
+// MARK: - String
 extension String {
     func sha256() -> String {
         let data = Data(self.utf8)
@@ -159,6 +288,7 @@ extension String {
     }
 }
 
+// MARK: - ElectronicFishVC
 extension ElectronicFishVC {
     func createAndAnimateLabel() {
         // 创建 UILabel
@@ -215,25 +345,70 @@ extension ElectronicFishVC {
             }
         }
     }
+    
+    func setupUI() {
+        gongDe = readGongDeUsingUserDefaults()
+        gongDeLabel.text = gongDe.description
+        autoKickSwitch.addTarget(self, action: #selector(autoSwitchChanged(_:)), for: .valueChanged)
+        
+        self.overrideUserInterfaceStyle = .light
+        
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
 }
 
+// MARK: - DeepseekVC
 extension DeepseekVC {
+    func setupUI() {
+        self.queryTextView.layer.cornerRadius = 10
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
+        self.navigationItem.leftBarButtonItem?.image = UIImage(systemName: "plus.circle.fill")
+        
+        queryTV.delegate = self
+        queryTV.dataSource = self
+        queryTextView.delegate = self
+        // 监听键盘弹出
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        // 监听键盘收起
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        messages.append(Message(content: "嗨！我是DeepSeek。我可以帮你搜索、答疑、写作，请把你的任务交给我吧～", role: "system"))
+        
+        let tapGasture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        view.addGestureRecognizer(tapGasture)
+    }
+    
+    func loadChatHistory() {
+        chats = readChatHistoryUsingUserDefaults()
+    }
+    
     // 键盘弹出时调用
-    func adjustKeyboardConstraint(_ notification: Notification) {
-        // 获取键盘的高度
-        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-            let keyboardHeight = keyboardFrame.height
-            
-            // 更新文本框底部的约束
-            bottomConstraint.constant = keyboardHeight - view.safeAreaInsets.bottom + 45
-            
-            // 获取键盘动画的持续时间
-            if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
-                UIView.animate(withDuration: duration) {
-                    self.view.layoutIfNeeded()
-                }
+    func adjustKeyboardConstraint(_ notification: Notification, isShow: Bool) {
+        if isShow {
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                let keyboardHeight = keyboardFrame.height
+                bottomConstraint.constant = keyboardHeight + 10
+            }
+        } else {
+            bottomConstraint.constant = 30
+        }
+
+        if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
+            UIView.animate(withDuration: duration) {
+                self.view.layoutIfNeeded()
             }
         }
+        scrollToBottom()
     }
     
     // Scroll to bottom
@@ -245,12 +420,201 @@ extension DeepseekVC {
             queryTV.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
     }
+    
+    func addChatToChats() {
+        // When massages' count > 1
+        if messages.count > 1 {
+            let chat: Chat = Chat(messages: self.messages, chatID: self.messages[1].content)
+            
+            if !chats.contains(chat) {
+                // If one of chats has the same chatID with the new one
+                if let index = chats.firstIndex(where: { $0.chatID == chat.chatID }) {
+                    // Replace the chat with new chat
+                    chats[index] = chat
+                    print("Save: Replace")
+                } else {
+                    // Add new chat
+                    chats.append(chat)
+                    print("Save: Add")
+                }
+                saveChatHistoryUsingUserDefaults(self.chats)
+            } else {
+                print("Have a same request already.")
+            }
+        }
+    }
+    
+    func comfirm2StartNewChat() {
+        addChatToChats()
+        messages = [Message(content: "嗨！我是DeepSeek。我可以帮你搜索、答疑、写作，请把你的任务交给我吧～", role: "system")]
+        currentRowCount = self.messages.count
+        queryTV.reloadData()
+    }
+    
+    func alert_AreYouSure2StartNewChat() {
+        let alert = UIAlertController(title: "提示", message: "你确定要开启新对话吗？", preferredStyle: .alert)
+        // Add Cancel Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel, handler: { _ in
+            
+        }))
+        // Add Confirm Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+            self.comfirm2StartNewChat()
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func alert_netSearchNotAvailable() {
+        let alert = UIAlertController(title: "提示", message: "暂不支持此功能", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func sendDeepSeekAPIRequest() {
+        ProgressHUD.animate("请耐心等待...", .ballVerticalBounce)
+        queryTextView.resignFirstResponder()
+        queryTextView.text = ""
+        self.query = queryTextView.text
+        messages.append(Message(content: self.queryTextView.text, role: "user"))
+        currentRowCount += 1
+        queryTV.reloadData()
+        
+        // Handle response
+        print("Start sending request: \"\(self.query)\"")
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(kDeepSeekAPIKey)",
+            "Content-Type": "application/json"
+        ]
+        
+        let url = kDeepSeekBaseURL
+        let parameters: [String: Any] = [
+            "messages": messages.map { ["role": $0.role, "content": $0.content] },
+            "model": model,
+            "response_format": ["type": responseFormat.type]
+        ]
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
+            if let data = response.value {
+                let responseJSON = JSON(data)
+                print(responseJSON)
+                var message: Message
+                let role: String = responseJSON["choices"][0]["message"]["role"].stringValue
+                var content: String = ""
+                // If it's a R1 model, then load reasoning-content data
+                if responseJSON["model"].stringValue == kDeepSeekReasonerModel {
+                    content = responseJSON["choices"][0]["message"]["content"].stringValue
+                    let reasoning_content = responseJSON["choices"][0]["message"]["reasoning_content"].stringValue
+                    message = Message(content: content, role: role)
+                    message.reasoningContent = reasoning_content
+                } else {
+                    content = responseJSON["choices"][0]["message"]["content"].stringValue
+                    message = Message(content: content, role: role)
+                }
+                self.messages.append(message)
+                self.chatID = self.messages[1].content
+                self.currentRowCount += 1
+                self.queryTV.reloadData()
+                ProgressHUD.dismiss()
+            }
+        }
+        scrollToBottom()
+    }
+    
+    func setupDeepSeekCellUI(_ indexPath: IndexPath, _ cell: DeepSeekCell) {
+        let chatContentStyler = DownStyler(
+            configuration: DownStylerConfiguration(
+                fonts: StaticFontCollection(
+                    heading1: .systemFont(ofSize: 24, weight: .bold),
+                    heading2: .systemFont(ofSize: 20, weight: .bold),
+                    heading3: .systemFont(ofSize: 18, weight: .bold),
+                    body: .systemFont(ofSize: 17)
+                ),
+                colors: StaticColorCollection(
+                    heading1: .black,
+                    heading2: .black,
+                    heading3: .black,
+                    body: .black
+                )
+            )
+        )
+        let reasonContentStyler = DownStyler(
+            configuration: DownStylerConfiguration(
+                fonts: StaticFontCollection(
+                    heading1: .systemFont(ofSize: 21, weight: .bold),
+                    heading2: .systemFont(ofSize: 17, weight: .bold),
+                    heading3: .systemFont(ofSize: 15, weight: .bold),
+                    body: .systemFont(ofSize: 14)
+                ),
+                colors: StaticColorCollection(
+                    heading1: .gray,
+                    heading2: .gray,
+                    heading3: .gray,
+                    body: .gray
+                )
+            )
+        )
+        // If there is reasoning_content
+        if let reasoning_content = messages[indexPath.row].reasoningContent {
+            if let attributedChatString = renderMarkdown(markdownString: messages[indexPath.row].content, styler: chatContentStyler), let attributedReasoningContent = renderMarkdown(markdownString: reasoning_content, styler: reasonContentStyler) {
+                // 创建一个 NSMutableAttributedString
+                let mutableAttributedString = NSMutableAttributedString(attributedString: attributedReasoningContent)
+                let newlineAttributedString = NSAttributedString(string: "\n")
+                mutableAttributedString.append(newlineAttributedString)
+                
+                // 拼接 attributedChatString
+                mutableAttributedString.append(attributedChatString)
+                
+                // 设置 UILabel 的 attributedText
+                cell.deepSeekLabel.attributedText = mutableAttributedString
+            }
+        } else { // If there is not reasong_content
+            if let attributedString = renderMarkdown(markdownString: messages[indexPath.row].content, styler: chatContentStyler) {
+                cell.deepSeekLabel.attributedText = attributedString
+            }
+            cell.layoutIfNeeded()
+        }
+    }
+    
+    func setupQueryCellUI(_ cell: QueryCell, _ indexPath: IndexPath) {
+        cell.queryLabel.text = self.messages[indexPath.row].content
+        cell.layoutIfNeeded()
+    }
 }
 
+// MARK: - ChatHistoryTVC
 extension ChatHistoryTVC {
+    func setupUI() {
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
+        // Set slide back enabeld
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
+        self.tableView.reloadData()
+    }
+    
     func removeAllChatHistory() {
         chats.removeAll()
         saveChatHistoryUsingUserDefaults(chats)
         delegate?.didFinishingEditChats(chats)
+    }
+    
+    func alert_AreYouSure2ClearAllChatHistory() {
+        let alert = UIAlertController(title: "提示", message: "你确定要清除所有的历史记录吗？", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .destructive, handler: { _ in
+            self.removeAllChatHistory()
+            self.chatHistoryTV.reloadData()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func deleteRowFromDataSource(_ indexPath: IndexPath) {
+        chats.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+        saveChatHistoryUsingUserDefaults(chats)
+        self.delegate!.didFinishingEditChats(self.chats)
+        tableView.reloadData()
     }
 }

@@ -11,6 +11,100 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Dev InfoVC-->
+        <scene sceneID="vQT-ww-2kt">
+            <objects>
+                <viewController id="NJ4-7V-Sog" customClass="DevInfoVC" customModule="iAssistant" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3Zw-zJ-PKn">
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_5809" translatesAutoresizingMaskIntoConstraints="NO" id="kqB-4i-bhg">
+                                <rect key="frame" x="101" y="160" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="Qy8-1Z-9MX"/>
+                                    <constraint firstAttribute="width" constant="200" id="uLt-Mp-EDJ"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="University Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mnQ-XK-jFJ">
+                                <rect key="frame" x="10" y="410" width="382" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="School Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DpP-8q-PoQ">
+                                <rect key="frame" x="10" y="461" width="382" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Class Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fbI-yk-daT">
+                                <rect key="frame" x="10" y="512" width="382" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kgp-IO-som">
+                                <rect key="frame" x="10" y="563" width="382" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Github Link Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TEn-rI-siq">
+                                <rect key="frame" x="10" y="614" width="382" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i9I-Lg-DcB">
+                                <rect key="frame" x="10" y="665" width="382" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="nbY-iI-MZf"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="nbY-iI-MZf" firstAttribute="trailing" secondItem="mnQ-XK-jFJ" secondAttribute="trailing" constant="10" id="6aV-64-mYO"/>
+                            <constraint firstItem="i9I-Lg-DcB" firstAttribute="leading" secondItem="nbY-iI-MZf" secondAttribute="leading" constant="10" id="Aak-ds-R3b"/>
+                            <constraint firstItem="DpP-8q-PoQ" firstAttribute="leading" secondItem="nbY-iI-MZf" secondAttribute="leading" constant="10" id="DmZ-6U-LOr"/>
+                            <constraint firstItem="fbI-yk-daT" firstAttribute="top" secondItem="DpP-8q-PoQ" secondAttribute="bottom" constant="30" id="Ed2-Td-nj8"/>
+                            <constraint firstItem="Kgp-IO-som" firstAttribute="leading" secondItem="nbY-iI-MZf" secondAttribute="leading" constant="10" id="H42-7G-d83"/>
+                            <constraint firstItem="mnQ-XK-jFJ" firstAttribute="leading" secondItem="nbY-iI-MZf" secondAttribute="leading" constant="10" id="HCd-3W-gz4"/>
+                            <constraint firstItem="kqB-4i-bhg" firstAttribute="centerX" secondItem="3Zw-zJ-PKn" secondAttribute="centerX" id="JAB-eq-0he"/>
+                            <constraint firstItem="mnQ-XK-jFJ" firstAttribute="top" secondItem="kqB-4i-bhg" secondAttribute="bottom" constant="50" id="M56-tk-2JB"/>
+                            <constraint firstItem="nbY-iI-MZf" firstAttribute="trailing" secondItem="Kgp-IO-som" secondAttribute="trailing" constant="10" id="NGP-Ec-oum"/>
+                            <constraint firstItem="Kgp-IO-som" firstAttribute="top" secondItem="fbI-yk-daT" secondAttribute="bottom" constant="30" id="NPf-WR-qu9"/>
+                            <constraint firstItem="i9I-Lg-DcB" firstAttribute="top" secondItem="TEn-rI-siq" secondAttribute="bottom" constant="30" id="VmE-HA-yuf"/>
+                            <constraint firstItem="kqB-4i-bhg" firstAttribute="centerX" secondItem="3Zw-zJ-PKn" secondAttribute="centerX" id="Wbf-kQ-y9E"/>
+                            <constraint firstItem="nbY-iI-MZf" firstAttribute="trailing" secondItem="DpP-8q-PoQ" secondAttribute="trailing" constant="10" id="cE9-aG-dDF"/>
+                            <constraint firstItem="TEn-rI-siq" firstAttribute="top" secondItem="Kgp-IO-som" secondAttribute="bottom" constant="30" id="cgp-Cf-GZc"/>
+                            <constraint firstItem="mnQ-XK-jFJ" firstAttribute="centerX" secondItem="3Zw-zJ-PKn" secondAttribute="centerX" id="haD-Gm-etv"/>
+                            <constraint firstItem="TEn-rI-siq" firstAttribute="leading" secondItem="nbY-iI-MZf" secondAttribute="leading" constant="10" id="ixb-i8-oSm"/>
+                            <constraint firstItem="DpP-8q-PoQ" firstAttribute="top" secondItem="mnQ-XK-jFJ" secondAttribute="bottom" constant="30" id="jzI-5g-HmO"/>
+                            <constraint firstItem="nbY-iI-MZf" firstAttribute="trailing" secondItem="i9I-Lg-DcB" secondAttribute="trailing" constant="10" id="ly0-Pk-7qc"/>
+                            <constraint firstItem="kqB-4i-bhg" firstAttribute="top" secondItem="nbY-iI-MZf" secondAttribute="top" constant="54" id="pYR-ZR-1ME"/>
+                            <constraint firstItem="fbI-yk-daT" firstAttribute="leading" secondItem="nbY-iI-MZf" secondAttribute="leading" constant="10" id="sVV-xp-LRH"/>
+                            <constraint firstItem="nbY-iI-MZf" firstAttribute="trailing" secondItem="fbI-yk-daT" secondAttribute="trailing" constant="10" id="sl4-Nl-YhR"/>
+                            <constraint firstItem="nbY-iI-MZf" firstAttribute="trailing" secondItem="TEn-rI-siq" secondAttribute="trailing" constant="10" id="yT6-9s-gxw"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="UfX-Ge-csO"/>
+                    <connections>
+                        <outlet property="classLabel" destination="fbI-yk-daT" id="1TA-GX-1ax"/>
+                        <outlet property="emailLabel" destination="i9I-Lg-DcB" id="Gdn-h4-gtt"/>
+                        <outlet property="githubLinkLabel" destination="TEn-rI-siq" id="fXf-9v-eJb"/>
+                        <outlet property="logoImage" destination="kqB-4i-bhg" id="NLE-av-b0l"/>
+                        <outlet property="nameLabel" destination="Kgp-IO-som" id="4jQ-lG-Fvy"/>
+                        <outlet property="schoolLabel" destination="DpP-8q-PoQ" id="cxK-4u-bMR"/>
+                        <outlet property="universityLabel" destination="mnQ-XK-jFJ" id="pAC-SN-jjD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QVQ-Ba-nYC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2519.4029850746269" y="-667.27688787185355"/>
+        </scene>
         <!--我的助手-->
         <scene sceneID="iSu-uO-eyd">
             <objects>
@@ -179,7 +273,13 @@
                             <outlet property="delegate" destination="geI-hB-MiX" id="KUz-Nq-sRp"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="我的助手" largeTitleDisplayMode="always" id="AOB-hl-Wqq"/>
+                    <navigationItem key="navigationItem" title="我的助手" largeTitleDisplayMode="always" id="AOB-hl-Wqq">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="person" catalog="system" id="h4T-UV-egk">
+                            <connections>
+                                <segue destination="NJ4-7V-Sog" kind="show" id="wYu-G8-UJT"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="electronicFishIcon" destination="wmh-KX-Rad" id="Ng9-ZX-g1f"/>
                         <outlet property="translateIconImageView" destination="Nnm-Lw-fZp" id="deD-Rs-ecH"/>
@@ -1289,6 +1389,7 @@
     <resources>
         <image name="74a13e35088a3f07f590a58c8cfc27fb" width="500" height="500"/>
         <image name="ElectronicFish" width="1080" height="1071"/>
+        <image name="IMG_5809" width="166.66667175292969" height="166.66667175292969"/>
         <image name="antenna.radiowaves.left.and.right" catalog="system" width="128" height="111"/>
         <image name="arrow.up.circle.fill" catalog="system" width="128" height="123"/>
         <image name="bg" width="6016" height="4016"/>
@@ -1298,6 +1399,7 @@
         <image name="list.bullet" catalog="system" width="128" height="87"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="message.circle" catalog="system" width="128" height="123"/>
+        <image name="person" catalog="system" width="128" height="121"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
         <image name="thermometer.low" catalog="system" width="80" height="128"/>
         <image name="translateIcon" width="648" height="648"/>

@@ -59,6 +59,7 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
     @IBAction func submitButtonPressed(_ sender: UIButton) {
         if self.queryTextView.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
             sendDeepSeekAPIRequest()
+            queryTextView.text = ""
         } else {
             queryTextView.text = ""
             ProgressHUD.error("请输入内容")

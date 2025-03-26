@@ -58,17 +58,29 @@ extension WeatherInfoVC {
     }
     
     func setWeatherProperties(_ weatherJSON: JSON) {
-        self.weather.feelsLike = weatherJSON["now"]["feelsLike"].stringValue
-        self.weather.temp = weatherJSON["now"]["temp"].stringValue
-        self.weather.obsTime = weatherJSON["now"]["obsTime"].stringValue
-        self.weather.wind360 = weatherJSON["now"]["wind360"].stringValue
-        self.weather.humidity = weatherJSON["now"]["humidity"].stringValue
-        self.weather.windScale = weatherJSON["now"]["windScale"].stringValue
-        self.weather.pressure = weatherJSON["now"]["pressure"].stringValue
-        self.weather.text = weatherJSON["now"]["text"].stringValue
-        self.weather.icon = weatherJSON["now"]["icon"].stringValue
-        self.weather.windDir = weatherJSON["now"]["windDir"].stringValue
-        self.weather.windSpeed = weatherJSON["now"]["windSpeed"].stringValue
+        weather.feelsLike = weatherJSON["now"]["feelsLike"].stringValue
+        weather.temp = weatherJSON["now"]["temp"].stringValue
+        let timeString = weatherJSON["now"]["obsTime"].stringValue
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mmZZZZZ"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+
+        // Analyze update time
+        if let date = formatter.date(from: timeString) {
+            let calendar = Calendar.current
+            let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+            weather.obsTime = "北京时间 " + components.year!.description + "-" + components.month!.description + "-" + components.day!.description + " " + components.hour!.description + ":" + components.minute!.description
+        } else {
+            print("日期解析失败")
+        }
+        weather.wind360 = weatherJSON["now"]["wind360"].stringValue
+        weather.humidity = weatherJSON["now"]["humidity"].stringValue
+        weather.windScale = weatherJSON["now"]["windScale"].stringValue
+        weather.pressure = weatherJSON["now"]["pressure"].stringValue
+        weather.text = weatherJSON["now"]["text"].stringValue
+        weather.icon = weatherJSON["now"]["icon"].stringValue
+        weather.windDir = weatherJSON["now"]["windDir"].stringValue
+        weather.windSpeed = weatherJSON["now"]["windSpeed"].stringValue
     }
     
     func requestWeatherInfo(_ lon: CLLocationDegrees, _ lat: CLLocationDegrees) {
@@ -79,6 +91,7 @@ extension WeatherInfoVC {
             AF.request("\(kQWeatherInfoBaseURL)?location=\(self.city.cityID!)&key=\(kQWeatherAPIKey)").responseJSON { response in
                 if let data = response.value {
                     let weatherJSON = JSON(data)
+                    print(weatherJSON)
                     self.setWeatherProperties(weatherJSON)
                     self.displayWeatherInfo()
                     ProgressHUD.dismiss()

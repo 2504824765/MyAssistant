@@ -22,6 +22,21 @@ extension iAssistantTableVC {
         self.overrideUserInterfaceStyle = .light
         
         self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 40, weight: .regular)]
+        // Set daily quote
+        AF.request("https://api.xygeng.cn/openapi/one").responseJSON { response in
+            if let data = response.value {
+                let dataJSON = JSON(data)
+                print(dataJSON)
+                let quote = dataJSON["data"]["content"].stringValue
+                let tag = dataJSON["data"]["tag"].stringValue
+                self.contentLabel.text = "\t\(quote)"
+                self.authorLabel.text = "来自：\(tag)"
+                // mad这里必须要reloadData，不然tableView不会根据新的数据进行高度自适应
+                self.tableView.reloadData()
+            } else {
+                print("ERROR: Failed to get response")
+            }
+        }
     }
 }
 

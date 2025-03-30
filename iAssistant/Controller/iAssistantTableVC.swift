@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class iAssistantTableVC: UITableViewController {
-
+    @IBOutlet weak var authorLabel: UILabel!
+    @IBOutlet weak var contentLabel: UILabel!
     @IBOutlet weak var translateIconImageView: UIImageView!
-    
     @IBOutlet weak var electronicFishIcon: UIImageView!
     
     override func viewDidLoad() {
@@ -22,9 +24,7 @@ class iAssistantTableVC: UITableViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 40, weight: .regular)]
     }
-
-    // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
@@ -32,6 +32,6 @@ class iAssistantTableVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 4
+        return 6
     }
 }

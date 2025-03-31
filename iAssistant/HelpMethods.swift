@@ -26,7 +26,7 @@ extension iAssistantTableVC {
         AF.request("https://api.xygeng.cn/openapi/one").responseJSON { response in
             if let data = response.value {
                 let dataJSON = JSON(data)
-                print(dataJSON)
+//                print(dataJSON)
                 let quote = dataJSON["data"]["content"].stringValue
                 let tag = dataJSON["data"]["tag"].stringValue
                 self.contentLabel.text = "\t\(quote)"
@@ -398,6 +398,7 @@ extension ElectronicFishVC {
 // MARK: - DeepseekVC
 extension DeepseekVC {
     func setupUI() {
+        self.overrideUserInterfaceStyle = .light
         self.queryTextView.layer.cornerRadius = 10
         // Hide navigation back button
         navigationItem.hidesBackButton = true

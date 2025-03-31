@@ -18,16 +18,40 @@ class GameBoard {
     var size: Int
     var score: Int
     var points: [[Int]]
+    var step: Int
+    var heightScore: Int
     
     init(size: Int = 4) {
         self.score = 0
         self.size = size
         self.points = [[Int]](repeating: [Int](repeating: 0, count: size), count: size)
+        self.step = 0
+        self.heightScore = 0
+    }
+    
+    // Calculate total score
+    func calculateTotalScore() {
+        var currentScore = 0
+        for i in 0..<size {
+            for j in 0..<size {
+                currentScore += points[i][j]
+            }
+        }
+        score = currentScore
     }
     
     // Generate number randomly: 2 or 4
     func addRandomNumber(count: Int) {
         if count >= self.size*self.size { return }
+        var zerosCount = 0
+        for i in 0..<size {
+            for j in 0..<size {
+                if points[i][j] == 0 {
+                    zerosCount += 1
+                }
+            }
+        }
+        if count > zerosCount { return }
         for _ in 0..<count {
             let randomNumber = Int.random(in: 1...10)
             var flag: Bool = false
@@ -100,7 +124,7 @@ class GameBoard {
                 let zerosAfterEmerge = Array(repeating: 0, count: size - nonZeroRowAfterEmerge.count)
                 points[i] = nonZeroRowAfterEmerge + zerosAfterEmerge
             }
-            return
+            break
         case .right:
             for i in 0..<size {
                 // 1.
@@ -121,7 +145,7 @@ class GameBoard {
                 let zerosAfterEmerge = Array(repeating: 0, count: size - nonZeroRowAfterEmerge.count)
                 points[i] = zerosAfterEmerge + nonZeroRowAfterEmerge
             }
-            return
+            break
         case .up:
             // 1.提取数组
             for j in 0..<size {
@@ -149,7 +173,7 @@ class GameBoard {
                     points[i][j] = col[i]
                 }
             }
-            return
+            break
         case .down:
             // 1.提取数组
             for j in 0..<size {
@@ -179,8 +203,9 @@ class GameBoard {
                     points[i][j] = col[i]
                 }
             }
-            return
+            break
         }
+        step += 1
     }
     
     // Print board

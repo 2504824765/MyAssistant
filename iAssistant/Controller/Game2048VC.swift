@@ -8,14 +8,159 @@
 import UIKit
 
 class Game2048VC: UIViewController {
-
+    @IBOutlet weak var boardView: UIView!
+    @IBOutlet weak var point11: UILabel!
+    @IBOutlet weak var point12: UILabel!
+    @IBOutlet weak var point13: UILabel!
+    @IBOutlet weak var point14: UILabel!
+    @IBOutlet weak var point21: UILabel!
+    @IBOutlet weak var point22: UILabel!
+    @IBOutlet weak var point23: UILabel!
+    @IBOutlet weak var point24: UILabel!
+    @IBOutlet weak var point31: UILabel!
+    @IBOutlet weak var point32: UILabel!
+    @IBOutlet weak var point33: UILabel!
+    @IBOutlet weak var point34: UILabel!
+    @IBOutlet weak var point41: UILabel!
+    @IBOutlet weak var point42: UILabel!
+    @IBOutlet weak var point43: UILabel!
+    @IBOutlet weak var point44: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var heighestScoreLabel: UILabel!
+    @IBOutlet weak var stepLabel: UILabel!
+    @IBAction func newGameButtonPressed(_ sender: UIButton) {
+    }
+    
+    var gameBoard: GameBoard = GameBoard(size: 4)
+    
+    fileprivate func color4Value(_ value: Int) -> UIColor {
+        switch value {
+        case 0: return UIColor(red: 238/255, green: 228/255, blue: 218/255, alpha: 1)
+        case 2: return UIColor(red: 238/255, green: 228/255, blue: 218/255, alpha: 1)
+        case 4: return UIColor(red: 237/255, green: 224/255, blue: 200/255, alpha: 1)
+        case 8: return UIColor(red: 242/255, green: 177/255, blue: 121/255, alpha: 1)
+        case 16: return UIColor(red: 245/255, green: 149/255, blue: 99/255, alpha: 1)
+        case 32: return UIColor(red: 246/255, green: 124/255, blue: 95/255, alpha: 1)
+        case 64: return UIColor(red: 246/255, green: 94/255, blue: 59/255, alpha: 1)
+        case 128: return UIColor(red: 237/255, green: 207/255, blue: 114/255, alpha: 1)
+        case 256: return UIColor(red: 237/255, green: 204/255, blue: 97/255, alpha: 1)
+        case 512: return UIColor(red: 237/255, green: 200/255, blue: 80/255, alpha: 1)
+        case 1024: return UIColor(red: 237/255, green: 197/255, blue: 63/255, alpha: 1)
+        case 2048: return UIColor(red: 237/255, green: 194/255, blue: 46/255, alpha: 1)
+        default: return .black // 超过2048的数字颜色
+        }
+    }
+    
+    fileprivate func UpdatePoints() {
+        // Update points
+        for i in 0..<gameBoard.size {
+            for j in 0..<gameBoard.size {
+                if let point = self.value(forKey: "point\(i+1)\(j+1)") as? UILabel {
+                    if gameBoard.points[i][j] != 0 {
+                        point.text = gameBoard.points[i][j].description
+                    } else {
+                        point.text = ""
+                    }
+                    point.superview?.backgroundColor = color4Value(gameBoard.points[i][j])
+                    scoreLabel.text = gameBoard.score.description
+                    stepLabel.text = gameBoard.step.description
+                    if gameBoard.score > gameBoard.heightScore {
+                        gameBoard.score = gameBoard.heightScore
+                        heighestScoreLabel.text = gameBoard.heightScore.description
+                    }
+                }
+            }
+        }
+    }
+    
+    func setupSwipeGestures() {
+        let directions: [UISwipeGestureRecognizer.Direction] = [.up, .down, .left, .right]
+        for direction in directions {
+            let gesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+            gesture.direction = direction
+            boardView.addGestureRecognizer(gesture)
+        }
+    }
+    
+    fileprivate func gameOver() {
+        if gameBoard.score > gameBoard.heightScore {
+            gameBoard.score = gameBoard.heightScore
+        }
+        let alert = UIAlertController(title: "提示", message: "游戏结束\n总得分：\(gameBoard.score)", preferredStyle: .alert)
+        // Add Confirm Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func handleSwipe (_ gesture: UISwipeGestureRecognizer) {
+        // 两个一个交替增加
+        var count: Int = 1
+        if gameBoard.step % 2 == 1 {
+            count = 2
+        }
+        switch gesture.direction {
+        case .up:
+            gameBoard.move(direction: .up)
+            gameBoard.addRandomNumber(count: count)
+            UpdatePoints()
+            gameBoard.calculateTotalScore()
+            if gameBoard.isOver() {
+                gameOver()
+            }
+            break
+        case .down:
+            gameBoard.move(direction: .down)
+            gameBoard.addRandomNumber(count: count)
+            UpdatePoints()
+            gameBoard.calculateTotalScore()
+            if gameBoard.isOver() {
+                gameOver()
+            }
+            break
+        case .left:
+            gameBoard.move(direction: .left)
+            gameBoard.addRandomNumber(count: count)
+            UpdatePoints()
+            gameBoard.calculateTotalScore()
+            if gameBoard.isOver() {
+                gameOver()
+            }
+            break
+        case .right:
+            gameBoard.move(direction: .right)
+            gameBoard.addRandomNumber(count: count)
+            UpdatePoints()
+            gameBoard.calculateTotalScore()
+            if gameBoard.isOver() {
+                gameOver()
+            }
+            break
+        default:
+            print("ERROR: Cannot recognize swipe direction")
+            break
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let gameBoard = GameBoard(size: 4)
+        self.overrideUserInterfaceStyle = .light
+        boardView.layer.cornerRadius = 5
+        for i in 0..<gameBoard.size {
+            for j in 0..<gameBoard.size {
+                if let point = self.value(forKey: "point\(i+1)\(j+1)") as? UILabel {
+                    point.superview?.layer.cornerRadius = 5
+                    point.font = UIFont.boldSystemFont(ofSize: 35)
+                    point.textColor = .gray
+                }
+            }
+        }
+        scoreLabel.superview?.layer.cornerRadius = 5
+        heighestScoreLabel.superview?.layer.cornerRadius = 5
+        stepLabel.superview?.layer.cornerRadius = 5
         gameBoard.addRandomNumber(count: 10)
-        gameBoard.printBoard()
-        gameBoard.move(direction: .down)
-        gameBoard.printBoard()
+        UpdatePoints()
+        setupSwipeGestures()
     }
     
 

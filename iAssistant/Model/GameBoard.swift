@@ -7,14 +7,14 @@
 
 import Foundation
 
-enum Direction {
+enum Direction{
     case up
     case down
     case left
     case right
 }
 
-class GameBoard {
+class GameBoard: Codable {
     var size: Int
     var score: Int
     var points: [[Int]]

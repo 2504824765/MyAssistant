@@ -28,10 +28,26 @@ class Game2048VC: UIViewController {
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var heighestScoreLabel: UILabel!
     @IBOutlet weak var stepLabel: UILabel!
-    @IBAction func newGameButtonPressed(_ sender: UIButton) {
-    }
+    @IBOutlet weak var difficultyButton: UIButton!
     
     var gameBoard: GameBoard = GameBoard(size: 4)
+    
+    @IBAction func difficultyOption(_ sender: UIMenuElement) {
+        print(sender.title)
+        difficultyButton.setTitle(sender.title, for: .normal)
+    }
+    
+    @IBAction func newGameButtonPressed(_ sender: UIButton) {
+        let alert = UIAlertController(title: "提示", message: "确定要开始新游戏吗？", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "确定", style: .default, handler: { _ in
+            self.gameBoard = GameBoard()
+            self.gameBoard.addRandomNumber(count: 10)
+            self.setupGame()
+        }))
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: { _ in
+        }))
+        self.present(alert, animated: true)
+    }
     
     fileprivate func color4Value(_ value: Int) -> UIColor {
         switch value {
@@ -47,7 +63,7 @@ class Game2048VC: UIViewController {
         case 512: return UIColor(red: 237/255, green: 200/255, blue: 80/255, alpha: 1)
         case 1024: return UIColor(red: 237/255, green: 197/255, blue: 63/255, alpha: 1)
         case 2048: return UIColor(red: 237/255, green: 194/255, blue: 46/255, alpha: 1)
-        default: return .black // 超过2048的数字颜色
+        default: return .black
         }
     }
     
@@ -62,14 +78,16 @@ class Game2048VC: UIViewController {
                         point.text = ""
                     }
                     point.superview?.backgroundColor = color4Value(gameBoard.points[i][j])
-                    scoreLabel.text = gameBoard.score.description
-                    stepLabel.text = gameBoard.step.description
-                    if gameBoard.score > gameBoard.heightScore {
-                        gameBoard.score = gameBoard.heightScore
-                        heighestScoreLabel.text = gameBoard.heightScore.description
-                    }
+
                 }
             }
+        }
+        print("score: \(gameBoard.score)")
+        scoreLabel.text = gameBoard.score.description
+        stepLabel.text = gameBoard.step.description
+        if gameBoard.score > gameBoard.heightScore {
+            gameBoard.heightScore = gameBoard.score
+            heighestScoreLabel.text = gameBoard.heightScore.description
         }
     }
     
@@ -83,9 +101,14 @@ class Game2048VC: UIViewController {
     }
     
     fileprivate func gameOver() {
+        // Update heighest score and save
         if gameBoard.score > gameBoard.heightScore {
-            gameBoard.score = gameBoard.heightScore
+            gameBoard.heightScore = gameBoard.score
+            saveScore2048UsingUserDefaults(gameBoard.heightScore)
+            saveGameBoardUsingUserDefaults(GameBoard(size: 0))
         }
+        scoreLabel.text = gameBoard.score.description
+        heighestScoreLabel.text = gameBoard.heightScore.description
         let alert = UIAlertController(title: "提示", message: "游戏结束\n总得分：\(gameBoard.score)", preferredStyle: .alert)
         // Add Confirm Button
         alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
@@ -142,6 +165,14 @@ class Game2048VC: UIViewController {
         }
     }
     
+    fileprivate func setupGame() {
+        UpdatePoints()
+        gameBoard.calculateTotalScore()
+        scoreLabel.text = gameBoard.score.description
+        gameBoard.heightScore = readScore2048UsingUserDefaults()
+        heighestScoreLabel.text = gameBoard.heightScore.description
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.overrideUserInterfaceStyle = .light
@@ -158,9 +189,29 @@ class Game2048VC: UIViewController {
         scoreLabel.superview?.layer.cornerRadius = 5
         heighestScoreLabel.superview?.layer.cornerRadius = 5
         stepLabel.superview?.layer.cornerRadius = 5
-        gameBoard.addRandomNumber(count: 10)
-        UpdatePoints()
         setupSwipeGestures()
+        // If there's an old game
+        if readGameBoardUsingUserDefaults().size != 0 {
+            let alert = UIAlertController(title: "提示", message: "要继续之前的游戏吗？", preferredStyle: .alert)
+            // Add Confirm Button
+            alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+                self.gameBoard = readGameBoardUsingUserDefaults()
+                self.setupGame()
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("开始新游戏", comment: "Cancel action"), style: .cancel, handler: { _ in
+                self.gameBoard.addRandomNumber(count: 10)
+                self.setupGame()
+            }))
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            gameBoard.addRandomNumber(count: 10)
+            setupGame()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        saveGameBoardUsingUserDefaults(gameBoard)
     }
     
 

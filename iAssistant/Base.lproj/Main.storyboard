@@ -346,7 +346,7 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="c0z-Qm-V3o">
-                                <rect key="frame" x="52" y="224.66666666666666" width="298" height="47.999999999999972"/>
+                                <rect key="frame" x="52" y="233" width="298" height="48"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fia-vu-Qw8">
                                         <rect key="frame" x="0.0" y="0.0" width="68" height="48"/>
@@ -427,7 +427,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Utb-jN-eBt">
-                                        <rect key="frame" x="222" y="6.6666666666666856" width="76" height="35"/>
+                                        <rect key="frame" x="222" y="6.6666666666666572" width="76" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="TCC-oc-Xx5"/>
                                             <constraint firstAttribute="width" constant="76" id="eG3-Ug-Wlh"/>
@@ -449,8 +449,8 @@
                                 </constraints>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2048游戏" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nrg-5b-6we">
-                                <rect key="frame" x="136" y="156" width="130" height="33.666666666666657"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                                <rect key="frame" x="120.33333333333333" y="156" width="161.66666666666669" height="42"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -835,12 +835,38 @@
                                             <segue destination="ZYf-yQ-XAB" kind="show" id="SEL-3K-zw6"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="pKu-ro-VVG">
-                                        <rect key="frame" x="0.0" y="442.00000762939453" width="402" height="44.666667938232422"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="pKu-ro-VVG">
+                                        <rect key="frame" x="0.0" y="442.00000762939453" width="402" height="80.333335876464844"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pKu-ro-VVG" id="TqP-13-Qgb">
-                                            <rect key="frame" x="0.0" y="0.0" width="402" height="44.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="371.66666666666669" height="80.333335876464844"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="22" translatesAutoresizingMaskIntoConstraints="NO" id="JYP-LN-3OB">
+                                                    <rect key="frame" x="30" y="10.000000000000004" width="333.66666666666669" height="60.333333333333343"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="2048_logo" translatesAutoresizingMaskIntoConstraints="NO" id="SEL-bW-PFs">
+                                                            <rect key="frame" x="0.0" y="0.3333333333333357" width="60" height="60"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="60" id="1kx-2X-CD2"/>
+                                                                <constraint firstAttribute="width" constant="60" id="Wp4-kr-VCj"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2048" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6q-7Z-FRI">
+                                                            <rect key="frame" x="81.999999999999986" y="15.333333333333332" width="251.66666666666663" height="29.999999999999996"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="JYP-LN-3OB" secondAttribute="bottom" constant="10" id="7J0-a2-dZv"/>
+                                                <constraint firstItem="JYP-LN-3OB" firstAttribute="leading" secondItem="TqP-13-Qgb" secondAttribute="leading" constant="30" id="9VC-ub-RLw"/>
+                                                <constraint firstItem="JYP-LN-3OB" firstAttribute="top" secondItem="TqP-13-Qgb" secondAttribute="top" constant="10" id="JPn-gL-HC3"/>
+                                                <constraint firstAttribute="trailing" secondItem="JYP-LN-3OB" secondAttribute="trailing" constant="8" id="pig-wK-50E"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <segue destination="zvE-Aw-h8l" kind="show" id="Fre-Wr-Na3"/>
@@ -869,6 +895,26 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="huY-5r-3na" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="22" id="P44-Yr-2dL">
+                    <rect key="frame" x="0.0" y="0.0" width="333.66666666666669" height="60.333333333333336"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="message.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="A8d-1T-1T0">
+                            <rect key="frame" x="0.0" y="1" width="60" height="58.666666666666664"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="60" id="C2u-xz-wav"/>
+                                <constraint firstAttribute="height" constant="60" id="w8a-cp-chO"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AI助手" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ryF-0v-SC9">
+                            <rect key="frame" x="81.999999999999986" y="15.333333333333336" width="251.66666666666663" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="1gg-gZ-ai1"/>
+                </stackView>
             </objects>
             <point key="canvasLocation" x="1739.6946564885495" y="3.5211267605633805"/>
         </scene>
@@ -1970,6 +2016,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="2048_logo" width="300" height="300"/>
         <image name="74a13e35088a3f07f590a58c8cfc27fb" width="500" height="500"/>
         <image name="ElectronicFish" width="1080" height="1071"/>
         <image name="IMG_5809" width="166.66667175292969" height="166.66667175292969"/>

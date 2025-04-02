@@ -758,6 +758,9 @@ extension Game2048VC {
     
     func setupUI() {
         self.overrideUserInterfaceStyle = .light
+        // Hide navigation back button
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
         boardView.layer.cornerRadius = 5
         for i in 0..<gameBoard.size {
             for j in 0..<gameBoard.size {

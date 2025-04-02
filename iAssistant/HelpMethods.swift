@@ -206,7 +206,7 @@ extension TranslateVC {
                     translateItem = TranslateItem(originText: originText, translateText: translateText, l: l)
                     print("小语种")
                 }
-                var errorCode = json["errorCode"].stringValue
+                let errorCode = json["errorCode"].stringValue
                 if errorCode != "0" {
                     if errorCode == "401" {
                         ProgressHUD.error("Error code: \(errorCode)\n开发者API欠费，请联系开发者")
@@ -216,7 +216,9 @@ extension TranslateVC {
                     return
                 }
                 if !self.translateHistory.contains(where: { $0 == translateItem }) {
+                    self.translateHistory.reverse()
                     self.translateHistory.append(translateItem)
+                    self.translateHistory.reverse()
                     print("Save mode: Add")
                     saveHistorysUsingUserDefaults(historys: self.translateHistory)
                     self.translateHistoryTV.reloadData()

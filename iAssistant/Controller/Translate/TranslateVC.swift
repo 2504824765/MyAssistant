@@ -26,10 +26,6 @@ class TranslateVC: UIViewController, UITableViewDelegate {
     }
     
     @IBAction func searchButtonPressed(_ sender: UIButton) {
-//        guard let originString = translateTextField.text, !originString.isEmpty else {
-//            ProgressHUD.error("请输入要翻译的内容")
-//            return
-//        }
         guard let originString = translateTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !originString.isEmpty else {
             ProgressHUD.error("请输入要翻译的内容")
             return

@@ -46,7 +46,9 @@ class DeepseekVC: UIViewController, UITableViewDelegate {
     }
     
     @IBAction func newChatButtonPressed(_ sender: UIBarButtonItem) {
-        alert_AreYouSure2StartNewChat()
+        alert_AreYouSure2StartNewChat {
+            self.comfirm2StartNewChat()
+        }
     }
     
     @IBAction func modelSwitchButtonPressed(_ sender: Any) {

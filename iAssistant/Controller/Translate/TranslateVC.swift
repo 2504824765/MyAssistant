@@ -20,7 +20,9 @@ class TranslateVC: UIViewController, UITableViewDelegate {
     @IBOutlet weak var translateHistoryTV: UITableView!
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
-        alert_AreYouSure2DeleteAllTranslateHistory()
+        alert_AreYouSure2DeleteAllTranslateHistory {
+            self.deleteAllTranslateHistory()
+        }
     }
     
     @IBAction func searchButtonPressed(_ sender: UIButton) {

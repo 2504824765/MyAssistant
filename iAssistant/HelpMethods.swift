@@ -295,15 +295,14 @@ extension TranslateVC {
         saveHistorysUsingUserDefaults(historys: self.translateHistory)
     }
     
-    func alert_AreYouSure2DeleteAllTranslateHistory() {
+    func alert_AreYouSure2DeleteAllTranslateHistory(confirmAction: @escaping () -> Void) {
         let alert = UIAlertController(title: "提示", message: "你确定要清除所有记录吗？", preferredStyle: .alert)
         // Add Cancel Button
         alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel, handler: { _ in
-            
         }))
         // Add Confirm Button
         alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .destructive, handler: { _ in
-            self.deleteAllTranslateHistory()
+            confirmAction()
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -485,7 +484,7 @@ extension DeepseekVC {
         queryTV.reloadData()
     }
     
-    func alert_AreYouSure2StartNewChat() {
+    func alert_AreYouSure2StartNewChat(confirmAction: @escaping () -> Void) {
         let alert = UIAlertController(title: "提示", message: "你确定要开启新对话吗？", preferredStyle: .alert)
         // Add Cancel Button
         alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel, handler: { _ in
@@ -493,7 +492,7 @@ extension DeepseekVC {
         }))
         // Add Confirm Button
         alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
-            self.comfirm2StartNewChat()
+            confirmAction()
         }))
         present(alert, animated: true, completion: nil)
     }
@@ -636,12 +635,11 @@ extension ChatHistoryTVC {
         delegate?.didFinishingEditChats(chats)
     }
     
-    func alert_AreYouSure2ClearAllChatHistory() {
+    func alert_AreYouSure2ClearAllChatHistory(confirmAcion: @escaping () -> Void) {
         let alert = UIAlertController(title: "提示", message: "你确定要清除所有的历史记录吗？", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: "Cancel action"), style: .cancel))
         alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .destructive, handler: { _ in
-            self.removeAllChatHistory()
-            self.chatHistoryTV.reloadData()
+            confirmAcion()
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -652,5 +650,127 @@ extension ChatHistoryTVC {
         saveChatHistoryUsingUserDefaults(chats)
         self.delegate!.didFinishingEditChats(self.chats)
         tableView.reloadData()
+    }
+}
+
+// MARK: - 2048
+extension Game2048VC {
+    func alert_AreYouSureToStartNewGame(with confirmAction: @escaping () -> Void) {
+        let alert = UIAlertController(title: "提示", message: "确定要开始新游戏吗？", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "确定", style: .default, handler: { _ in
+            confirmAction()
+        }))
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: { _ in
+        }))
+        self.present(alert, animated: true)
+    }
+    
+    func UpdatePoints() {
+        // Update points
+        for i in 0..<gameBoard.size {
+            for j in 0..<gameBoard.size {
+                if let point = self.value(forKey: "point\(i+1)\(j+1)") as? UILabel {
+                    if gameBoard.points[i][j] != 0 {
+                        point.text = gameBoard.points[i][j].description
+                    } else {
+                        point.text = ""
+                    }
+                    point.superview?.backgroundColor = color4Value(gameBoard.points[i][j])
+
+                }
+            }
+        }
+        scoreLabel.text = gameBoard.score.description
+        stepLabel.text = gameBoard.step.description
+        if gameBoard.score > gameBoard.heightScore {
+            gameBoard.heightScore = gameBoard.score
+            heighestScoreLabel.text = gameBoard.heightScore.description
+        }
+    }
+    
+    func color4Value(_ value: Int) -> UIColor {
+        switch value {
+        case 0: return UIColor(red: 238/255, green: 228/255, blue: 218/255, alpha: 1)
+        case 2: return UIColor(red: 238/255, green: 228/255, blue: 218/255, alpha: 1)
+        case 4: return UIColor(red: 237/255, green: 224/255, blue: 200/255, alpha: 1)
+        case 8: return UIColor(red: 242/255, green: 177/255, blue: 121/255, alpha: 1)
+        case 16: return UIColor(red: 245/255, green: 149/255, blue: 99/255, alpha: 1)
+        case 32: return UIColor(red: 246/255, green: 124/255, blue: 95/255, alpha: 1)
+        case 64: return UIColor(red: 246/255, green: 94/255, blue: 59/255, alpha: 1)
+        case 128: return UIColor(red: 237/255, green: 207/255, blue: 114/255, alpha: 1)
+        case 256: return UIColor(red: 237/255, green: 204/255, blue: 97/255, alpha: 1)
+        case 512: return UIColor(red: 237/255, green: 200/255, blue: 80/255, alpha: 1)
+        case 1024: return UIColor(red: 237/255, green: 197/255, blue: 63/255, alpha: 1)
+        case 2048: return UIColor(red: 237/255, green: 194/255, blue: 46/255, alpha: 1)
+        default: return .black
+        }
+    }
+    
+    fileprivate func alert_GameOver() {
+        let alert = UIAlertController(title: "提示", message: "游戏结束\n总得分：\(gameBoard.score)", preferredStyle: .alert)
+        // Add Confirm Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func gameOver() {
+        // Update heighest score and save
+        if gameBoard.score > gameBoard.heightScore {
+            gameBoard.heightScore = gameBoard.score
+            saveScore2048UsingUserDefaults(gameBoard.heightScore)
+        }
+        scoreLabel.text = gameBoard.score.description
+        heighestScoreLabel.text = gameBoard.heightScore.description
+        saveGameBoardUsingUserDefaults(GameBoard(size: 0))
+        isOver = true
+        alert_GameOver()
+    }
+    
+    func setupSwipeGestures() {
+        let directions: [UISwipeGestureRecognizer.Direction] = [.up, .down, .left, .right]
+        for direction in directions {
+            let gesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+            gesture.direction = direction
+            boardView.addGestureRecognizer(gesture)
+        }
+    }
+    
+    func setupGame() {
+        UpdatePoints()
+        gameBoard.calculateTotalScore()
+        scoreLabel.text = gameBoard.score.description
+        gameBoard.heightScore = readScore2048UsingUserDefaults()
+        heighestScoreLabel.text = gameBoard.heightScore.description
+    }
+    
+    func alert_AreYouSure2ContinueOlderGame(confirmAction: @escaping () -> Void, cancelAction: @escaping () -> Void) {
+        let alert = UIAlertController(title: "提示", message: "要继续之前的游戏吗？", preferredStyle: .alert)
+        // Add Confirm Button
+        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+            confirmAction()
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("开始新游戏", comment: "Cancel action"), style: .cancel, handler: { _ in
+            cancelAction()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func setupUI() {
+        self.overrideUserInterfaceStyle = .light
+        boardView.layer.cornerRadius = 5
+        for i in 0..<gameBoard.size {
+            for j in 0..<gameBoard.size {
+                if let point = self.value(forKey: "point\(i+1)\(j+1)") as? UILabel {
+                    point.superview?.layer.cornerRadius = 5
+                    point.font = UIFont.boldSystemFont(ofSize: 35)
+                    point.textColor = .gray
+                }
+            }
+        }
+        scoreLabel.superview?.layer.cornerRadius = 5
+        heighestScoreLabel.superview?.layer.cornerRadius = 5
+        stepLabel.superview?.layer.cornerRadius = 5
+        setupSwipeGestures()
     }
 }

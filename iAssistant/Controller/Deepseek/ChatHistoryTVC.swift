@@ -48,7 +48,10 @@ class ChatHistoryTVC: UITableViewController {
     }
 
     @IBAction func deleteButtonPressed(_ sender: Any) {
-        alert_AreYouSure2ClearAllChatHistory()
+        alert_AreYouSure2ClearAllChatHistory {
+            self.removeAllChatHistory()
+            self.chatHistoryTV.reloadData()
+        }
     }
 
     // Override to support editing the table view.

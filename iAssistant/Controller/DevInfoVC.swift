@@ -29,7 +29,7 @@ class DevInfoVC: UIViewController, UIGestureRecognizerDelegate {
         // Set slide back enabeld
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        
+        // test git
         logoImage.layer.cornerRadius = 10
         logoImage.layer.masksToBounds = true
         nameLabel.text = name

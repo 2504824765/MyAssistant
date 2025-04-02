@@ -7,6 +7,12 @@
 
 import UIKit
 
+enum Difficulty {
+    case Easy
+    case General
+    case Difficult
+}
+
 class Game2048VC: UIViewController {
     @IBOutlet weak var boardView: UIView!
     @IBOutlet weak var point11: UILabel!
@@ -31,10 +37,19 @@ class Game2048VC: UIViewController {
     @IBOutlet weak var difficultyButton: UIButton!
     
     var gameBoard: GameBoard = GameBoard(size: 4)
+    var isOver: Bool = false
+    var difficulty: Difficulty = .General
     
     @IBAction func difficultyOption(_ sender: UIMenuElement) {
-        print(sender.title)
         difficultyButton.setTitle(sender.title, for: .normal)
+        if sender.title == "简单" {
+            difficulty = .Easy
+        } else if sender.title == "一般" {
+            difficulty = .General
+        } else if sender.title == "困难" {
+            difficulty = .Difficult
+        }
+        print(difficulty)
     }
     
     @IBAction func newGameButtonPressed(_ sender: UIButton) {
@@ -43,6 +58,7 @@ class Game2048VC: UIViewController {
             self.gameBoard = GameBoard()
             self.gameBoard.addRandomNumber(count: 10)
             self.setupGame()
+            self.isOver = false
         }))
         alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: { _ in
         }))
@@ -82,7 +98,6 @@ class Game2048VC: UIViewController {
                 }
             }
         }
-        print("score: \(gameBoard.score)")
         scoreLabel.text = gameBoard.score.description
         stepLabel.text = gameBoard.step.description
         if gameBoard.score > gameBoard.heightScore {
@@ -105,63 +120,58 @@ class Game2048VC: UIViewController {
         if gameBoard.score > gameBoard.heightScore {
             gameBoard.heightScore = gameBoard.score
             saveScore2048UsingUserDefaults(gameBoard.heightScore)
-            saveGameBoardUsingUserDefaults(GameBoard(size: 0))
         }
         scoreLabel.text = gameBoard.score.description
         heighestScoreLabel.text = gameBoard.heightScore.description
+        saveGameBoardUsingUserDefaults(GameBoard(size: 0))
+        isOver = true
         let alert = UIAlertController(title: "提示", message: "游戏结束\n总得分：\(gameBoard.score)", preferredStyle: .alert)
         // Add Confirm Button
         alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+
         }))
         self.present(alert, animated: true, completion: nil)
     }
     
     @objc func handleSwipe (_ gesture: UISwipeGestureRecognizer) {
-        // 两个一个交替增加
-        var count: Int = 1
-        if gameBoard.step % 2 == 1 {
+        var count: Int
+        switch difficulty {
+        case .Easy:
+            // 简单难度：每走一步增加一个
+            count = 1
+        case .General:
+            // 一般难度：两个一个交替增加
+            if gameBoard.step % 2 == 1 {
+                count = 2
+            } else {
+                count = 1
+            }
+        case .Difficult:
+            // 困难难度：每走一步增加两个
             count = 2
         }
         switch gesture.direction {
         case .up:
             gameBoard.move(direction: .up)
-            gameBoard.addRandomNumber(count: count)
-            UpdatePoints()
-            gameBoard.calculateTotalScore()
-            if gameBoard.isOver() {
-                gameOver()
-            }
             break
         case .down:
             gameBoard.move(direction: .down)
-            gameBoard.addRandomNumber(count: count)
-            UpdatePoints()
-            gameBoard.calculateTotalScore()
-            if gameBoard.isOver() {
-                gameOver()
-            }
             break
         case .left:
             gameBoard.move(direction: .left)
-            gameBoard.addRandomNumber(count: count)
-            UpdatePoints()
-            gameBoard.calculateTotalScore()
-            if gameBoard.isOver() {
-                gameOver()
-            }
             break
         case .right:
             gameBoard.move(direction: .right)
-            gameBoard.addRandomNumber(count: count)
-            UpdatePoints()
-            gameBoard.calculateTotalScore()
-            if gameBoard.isOver() {
-                gameOver()
-            }
             break
         default:
             print("ERROR: Cannot recognize swipe direction")
             break
+        }
+        gameBoard.addRandomNumber(count: count)
+        UpdatePoints()
+        gameBoard.calculateTotalScore()
+        if gameBoard.isOver() {
+            gameOver()
         }
     }
     
@@ -211,7 +221,9 @@ class Game2048VC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        saveGameBoardUsingUserDefaults(gameBoard)
+        if !isOver {
+            saveGameBoardUsingUserDefaults(gameBoard)
+        }
     }
     
 

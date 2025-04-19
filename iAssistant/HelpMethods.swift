@@ -708,25 +708,33 @@ extension Game2048VC {
         }
     }
     
-    fileprivate func alert_GameOver() {
-        let alert = UIAlertController(title: "提示", message: "游戏结束\n总得分：\(gameBoard.score)", preferredStyle: .alert)
+    fileprivate func alert_GameOver(with continueAction: @escaping () -> Void, endAction: @escaping () -> Void) {
+        let alert = UIAlertController(title: "游戏结束", message: "总得分：\(gameBoard.score)\n可通过回答古诗词问题复活，要继续吗？", preferredStyle: .alert)
         // Add Confirm Button
-        alert.addAction(UIAlertAction(title: NSLocalizedString("确定", comment: "Default action"), style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("继续", comment: "Continue game"), style: .default, handler: { _ in
+            continueAction()
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("结束", comment: "Default action"), style: .cancel, handler: { _ in
+            endAction()
         }))
         self.present(alert, animated: true, completion: nil)
     }
     
-    func gameOver() {
-        // Update heighest score and save
-        if gameBoard.score > gameBoard.heightScore {
-            gameBoard.heightScore = gameBoard.score
-            saveScore2048UsingUserDefaults(gameBoard.heightScore)
+    func gameOver(index: Int) {
+        alert_GameOver {
+            self.answerView.isHidden = false
+            self.questionLabel.text = "\(self.questions[index]["question"] ?? "No question")\n\(self.questions[index]["options"] ?? "No choices")"
+        } endAction: {
+            // Update heighest score and save
+            if self.gameBoard.score > self.gameBoard.heightScore {
+                self.gameBoard.heightScore = self.gameBoard.score
+                saveScore2048UsingUserDefaults(self.gameBoard.heightScore)
+            }
+            self.scoreLabel.text = self.gameBoard.score.description
+            self.heighestScoreLabel.text = self.gameBoard.heightScore.description
+            saveGameBoardUsingUserDefaults(GameBoard(size: 0))
+            self.isOver = true
         }
-        scoreLabel.text = gameBoard.score.description
-        heighestScoreLabel.text = gameBoard.heightScore.description
-        saveGameBoardUsingUserDefaults(GameBoard(size: 0))
-        isOver = true
-        alert_GameOver()
     }
     
     func setupSwipeGestures() {

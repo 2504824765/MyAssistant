@@ -336,12 +336,73 @@
                                         </subviews>
                                         <viewLayoutGuide key="safeArea" id="86Y-34-2En"/>
                                     </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OtZ-Wq-nlz">
+                                        <rect key="frame" x="-27" y="10" width="354" height="300"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="这是问题" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="91Z-K1-tGQ">
+                                                <rect key="frame" x="8" y="15.999999999999998" width="338" height="20.333333333333329"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="k6f-WI-YaU">
+                                                <rect key="frame" x="60" y="240.66666666666666" width="234" height="34.333333333333343"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBT-c7-mws">
+                                                        <rect key="frame" x="0.0" y="0.0" width="36" height="34.333333333333336"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="gray" title="A"/>
+                                                        <connections>
+                                                            <action selector="answerButtonPressed:" destination="zvE-Aw-h8l" eventType="touchUpInside" id="CcF-ic-zQO"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vNV-Gc-1FL">
+                                                        <rect key="frame" x="66" y="0.0" width="36" height="34.333333333333336"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="gray" title="B"/>
+                                                        <connections>
+                                                            <action selector="answerButtonPressed:" destination="zvE-Aw-h8l" eventType="touchUpInside" id="aw2-JZ-OkV"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Nk-SD-P6X">
+                                                        <rect key="frame" x="132" y="0.0" width="36" height="34.333333333333336"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="gray" title="C"/>
+                                                        <connections>
+                                                            <action selector="answerButtonPressed:" destination="zvE-Aw-h8l" eventType="touchUpInside" id="Z6v-he-uWB"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hGo-xE-lMa">
+                                                        <rect key="frame" x="198" y="0.0" width="36" height="34.333333333333336"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="gray" title="D"/>
+                                                        <connections>
+                                                            <action selector="answerButtonPressed:" destination="zvE-Aw-h8l" eventType="touchUpInside" id="4NG-2I-EYe"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="354" id="B0b-qx-FBM"/>
+                                            <constraint firstItem="91Z-K1-tGQ" firstAttribute="top" secondItem="OtZ-Wq-nlz" secondAttribute="top" constant="16" id="Hix-22-euQ"/>
+                                            <constraint firstItem="91Z-K1-tGQ" firstAttribute="leading" secondItem="OtZ-Wq-nlz" secondAttribute="leading" constant="8" id="N1w-kP-DLM"/>
+                                            <constraint firstAttribute="height" constant="300" id="Wqg-Dp-Lga"/>
+                                            <constraint firstAttribute="bottom" secondItem="k6f-WI-YaU" secondAttribute="bottom" constant="25" id="Y4D-Zz-mWU"/>
+                                            <constraint firstAttribute="trailing" secondItem="91Z-K1-tGQ" secondAttribute="trailing" constant="8" id="cq7-MC-WWE"/>
+                                            <constraint firstItem="k6f-WI-YaU" firstAttribute="centerX" secondItem="OtZ-Wq-nlz" secondAttribute="centerX" id="zEe-z6-Y46"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBrownColor"/>
                                 <constraints>
+                                    <constraint firstItem="OtZ-Wq-nlz" firstAttribute="top" secondItem="Z9N-68-eDh" secondAttribute="top" constant="10" id="0Ar-Xf-RP0"/>
+                                    <constraint firstItem="OtZ-Wq-nlz" firstAttribute="centerX" secondItem="Z9N-68-eDh" secondAttribute="centerX" id="GJD-e8-JyG"/>
                                     <constraint firstAttribute="height" constant="282" id="a9y-XC-rJl"/>
                                     <constraint firstItem="Tys-67-FCl" firstAttribute="top" secondItem="Z9N-68-eDh" secondAttribute="top" constant="8" id="bhb-1z-9uc"/>
                                     <constraint firstItem="Tys-67-FCl" firstAttribute="leading" secondItem="Z9N-68-eDh" secondAttribute="leading" constant="8" id="iMD-ZB-K2m"/>
+                                    <constraint firstItem="OtZ-Wq-nlz" firstAttribute="centerX" secondItem="Z9N-68-eDh" secondAttribute="centerX" id="kIg-xf-cpo"/>
                                     <constraint firstAttribute="width" constant="300" id="yh0-tB-sqT"/>
                                 </constraints>
                             </view>
@@ -507,6 +568,7 @@
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="khf-Cw-ehn"/>
                     <connections>
+                        <outlet property="answerView" destination="OtZ-Wq-nlz" id="qhD-kH-eC5"/>
                         <outlet property="boardView" destination="Z9N-68-eDh" id="JkF-dh-Ldg"/>
                         <outlet property="difficultyButton" destination="93a-62-66V" id="5gb-sh-fOz"/>
                         <outlet property="heighestScoreLabel" destination="g9c-Gl-Wtu" id="lh2-iP-x3P"/>
@@ -526,6 +588,7 @@
                         <outlet property="point42" destination="5z6-WG-Lye" id="FD6-3D-6Nc"/>
                         <outlet property="point43" destination="xvY-ap-2w8" id="9Wx-zr-rBp"/>
                         <outlet property="point44" destination="1dc-15-nmY" id="tpd-Qq-Wul"/>
+                        <outlet property="questionLabel" destination="91Z-K1-tGQ" id="A6k-xy-wrc"/>
                         <outlet property="scoreLabel" destination="RTg-z0-KQT" id="7ju-NE-ksp"/>
                         <outlet property="stepLabel" destination="KyH-6q-Z78" id="tIC-Cf-n8x"/>
                     </connections>

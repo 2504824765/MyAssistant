@@ -42,7 +42,8 @@ class GameBoard: Codable {
     
     // Generate number randomly: 2 or 4
     func addRandomNumber(count: Int) {
-        if count >= self.size*self.size { return }
+        var addCount = count
+        if addCount >= self.size*self.size { return }
         var zerosCount = 0
         for i in 0..<size {
             for j in 0..<size {
@@ -51,8 +52,11 @@ class GameBoard: Codable {
                 }
             }
         }
-        if count > zerosCount { return }
-        for _ in 0..<count {
+//        if addCount > zerosCount { addCount = 1 }
+        if zerosCount == 1 {
+            addCount = 1
+        } else if addCount > zerosCount { return }
+        for _ in 0..<addCount {
             let randomNumber = Int.random(in: 1...10)
             var flag: Bool = false
             var x: Int = 0

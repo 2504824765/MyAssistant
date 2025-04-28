@@ -722,8 +722,14 @@ extension Game2048VC {
     
     func gameOver(index: Int) {
         alert_GameOver {
-            self.answerView.isHidden = false
-            self.questionLabel.text = "\(self.questions[index]["question"] ?? "No question")\n\(self.questions[index]["options"] ?? "No choices")"
+//            self.answerView.isHidden = false
+//            self.questionLabel.text = "\(self.questions[index]["question"] ?? "No question")\n\(self.questions[index]["options"] ?? "No choices")"
+            let alert = UIAlertController(title: "提示", message: "该功能暂未完成，敬请期待", preferredStyle: .alert)
+            // Add Confirm Button
+            alert.addAction(UIAlertAction(title: NSLocalizedString("继续", comment: "Continue game"), style: .default, handler: { _ in
+            }))
+            self.present(alert, animated: true, completion: nil)
+            
         } endAction: {
             // Update heighest score and save
             if self.gameBoard.score > self.gameBoard.heightScore {

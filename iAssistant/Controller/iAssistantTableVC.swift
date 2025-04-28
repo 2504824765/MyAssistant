@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import Alamofire
-import SwiftyJSON
 
 class iAssistantTableVC: UITableViewController {
     @IBOutlet weak var authorLabel: UILabel!
